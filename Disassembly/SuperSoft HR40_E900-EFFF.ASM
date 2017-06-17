@@ -23,6 +23,9 @@ E911: CA        DEX
 E912: 10 F8     BPL L_E90C                                  
 E914: 20 D4 C8  JSR EVAL_BP                                  ;Eval Byte Parameter
 E917: 8A        TXA                                         
+;--------------------------------------------------------------------------------
+; If the command was not found use the value for the Control Register
+;--------------------------------------------------------------------------------
 ;
 JTTarget10:
 E918: 29 0F     AND #$0F                                    
@@ -30,6 +33,9 @@ E91A: 8D FF EF  STA CONTROL_REG                              ;Control Register
 E91D: 8D 79 02  STA CONTROL_SAVE                             ;Control Register Save
 E920: 60        RTS                                         
 ;
+;--------------------------------------------------------------------------------
+; Push the target address on the stack and jump to it using RTS
+;--------------------------------------------------------------------------------
 ;
 DO_CMD:
 E921: BD 38 E9  LDA CMDVEC_HI,X                             
@@ -527,17 +533,17 @@ EBD2: A9 FF     LDA #$FF
 EBD4: 85 B1     STA PRTY                                     ;Tape Character Parity
 EBD6: 85 BD     STA INBIT                                    ;Cassette Temp (64#00A7)
 EBD8: 20 70 00  JSR CHRGET                                   ;Subroutine: Get Next Byte of BASIC Text
-EBDB: C9 52     CMP #$52                                    
+EBDB: C9 52     CMP #$52                                    ; Is it "R"?
 EBDD: F0 06     BEQ L_EBE5                                  
-EBDF: C9 4E     CMP #$4E                                    
+EBDF: C9 4E     CMP #$4E                                    ; Is it "N"?
 EBE1: D0 0B     BNE L_EBEE                                  
 EBE3: E6 B1     INC PRTY                                     ;Tape Character Parity
 ;
 L_EBE5:
 EBE5: 20 70 00  JSR CHRGET                                   ;Subroutine: Get Next Byte of BASIC Text
-EBE8: C9 48     CMP #$48                                    
+EBE8: C9 48     CMP #$48                                    ; Is it "H"?
 EBEA: F0 06     BEQ L_EBF2                                  
-EBEC: C9 56     CMP #$56                                    
+EBEC: C9 56     CMP #$56                                    ; Is it "V"?
 ;
 L_EBEE:
 EBEE: D0 74     BNE L_EC64                                  
@@ -613,7 +619,7 @@ EC56: 20 87 BD  JSR $BD87
 EC59: 20 D7 C8  JSR $C8D7                                   
 EC5C: 86 BC     STX BUFP2                                    ;Pointer: Tape I/O Buffer #2
 EC5E: F0 12     BEQ JTTarget11                              
-EC60: C9 2C     CMP #$2C                                    
+EC60: C9 2C     CMP #$2C                                    ; Is it COMMA?
 EC62: F0 35     BEQ L_EC99                                  
 ;
 L_EC64:
@@ -1269,6 +1275,9 @@ EFB9:           !BYTE $90,$94,$98,$9C,$A0,$A4,$A8,$AC       ;unknown
 L_EFC1:
 EFC1:           !BYTE $EA,$EA,$EA,$EA,$EA,$EA               ;filler
  
+;================================================================================
+; JUMP TABLE
+;================================================================================
 EFC7: 4C 80 EF  JMP JTTarget01                              
 EFCA: 4C 70 EF  JMP JTTarget02                              
 EFCD: 4C 34 EF  JMP JTTarget03                              

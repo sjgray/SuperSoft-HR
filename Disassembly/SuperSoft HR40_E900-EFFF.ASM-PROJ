@@ -161,6 +161,8 @@ EFB9,TABLE1,Unknown Table #1
 [COMMENTS]
 E900,=,Start of SuperSoft Code
 E902,-.Entry point for SYS commands 59650
+E918,-,If the command was not found use the value for the Control Register
+E921,-,Push the target address on the stack and jump to it using RTS
 E92A,-,Command Table
 E938,-,Command Vectors
 E954,=,"O" and "K" COMMANDS. Unknown. K=KILL?? Appears to restore CHRGET routine
