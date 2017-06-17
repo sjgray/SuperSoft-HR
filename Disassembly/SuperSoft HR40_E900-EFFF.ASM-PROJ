@@ -1,0 +1,187 @@
+[PROJECT]
+E900
+[ENTRYPT]
+EFC7,e1
+EFCA,e2
+EFCD,e3
+EFD0,e4
+EFD3,e5
+EFD6,e6
+EFD9,e7
+EFDC,e8
+EFDF,e9
+EFE2,e10
+EFE5,e11
+EFE8,e12
+EFEB,e13
+EFEE,e14
+EFF1,e15
+EFF4,e16
+EFF7,e17
+EFFA,e18
+EFFD,e19
+[SYMBOLS]
+0001,USRADD,USR Address Low Byte / High Byte
+0003,CHARAC,Search Character
+0004,ENDCHR,Flag: Scan for Quote at End of String
+0005,COUNT ,Input Buffer Pointer / No. of Subscripts
+0006,DIMFLG,Flag: Default Array DiMension / array name initial / AND, OR flag
+0007,VAUYP ,Data Type: $FF = String, $00 = Numeric
+0008,INTFLG,Data Type: $80 = Integer, $00 = Floating
+0009,GARBFL,Flag: DATA scan/LlST quote/Garbage Coll
+000A,SUBFLG,Flag: Subscript Ref / User Function Call
+000B,INPFLG,Flag: $00 = INPUT, $40 = GET, $98 = READ
+000C,TANSGN,Flag TAN sign / Comparison Result
+000D,DSTAT ,Disk Status DS$ descriptor
+0010,FNUM  ,File# of current I/O device (when non-zero suppresses INPUT prompt etc)
+0011,LINNUM,Temp: Integer Value
+0014,LASTPT,Last Temp String Address
+0016,TEMPST,Stack for Temporary Strings
+002E,STREND,Pointer End of BASIC Arrays (+1)
+0032,FRESPC,Utility String Pointer
+0034,MEMSIZ,Pointer: Highest Address Used by BASIC
+003C,DATLIN,Current DATA Line Number
+0063,FACSGN,Floating Accum.   #1: Sign
+0070,CHRGET,Subroutine: Get Next Byte of BASIC Text
+0076,CHRGOT,Entry to Get Same Byte of Text Again
+0090,CINV  ,Vector: Hardware Interrupt
+0094,NMINV ,Vector: Non-Maskable Interrupt
+0096,STATUS,Kernal I/O Status Word: ST
+0097,LSTX  ,Current Key Pressed: 255 = No Key
+009E,NDX   ,No. of Chars. in Keyboard Buffer (Queue)
+00A2,AVAIL ,Not Used
+00A9,GDBLN ,Character Under Cursor
+00B1,PRTY  ,Tape Character Parity
+00B2,DPSW  ,Flag: Tape Byte-Received
+00B3,TMPB3 ,Temporary save eg. logical address or DOS wedge
+00B7,TMPB7 ,Temp Data Area (64#00A3)
+00BB,BUFPNT,Pointer: Tape I/O Buffer #1
+00BC,BUFP2 ,Pointer: Tape I/O Buffer #2
+00BD,INBIT ,Cassette Temp (64#00A7)
+00BE,BITCI ,Cassette Temp (64#00A8)
+00BF,RINONE,RS-232 Flag: Check for Start Bit (64#00A9)
+00C0,PTR1  ,Tape Pass 1 Error Log
+00C1,PTR2  ,Tape Pass 2 Error Log
+00C4,PNT   ,Pointer: Current Screen Line Address
+00C9,EAL   ,Tape End Addresses/End of Program
+00CB,CMP0  ,Tape Timing Constants
+00CE,BITTS ,Cassette Temp (64#00B4): Tape read timer flag=IRQ enabled for Timer 1
+00CF,EOTRD ,End of tape read
+00D3,SA    ,Current Secondary Address
+00D5,LNMX  ,Physical Screen Line Length
+00D9,DATAX ,Current Character to Print
+00DA,FNADR ,Pointer: Current File Name
+00DC,INSRT ,Flag: Insert Mode, >0 = # INSTs
+00E0,SCTOP ,First line of window
+00E1,SCBOT ,Last line of window
+00E2,SCLF  ,First column of window
+00E5,KOUNT ,Repeat Speed Counter
+00E9,SCNVEC,Input from screen vector (from E006)
+00F9,CAS1  ,Tape Motor Interlock #1
+00FA,CAS2  ,Tape Motor Interlock #2
+00FB,STAL  ,I/O Start Address
+00FD,MEMUSS,Tape Load Temps
+00FF,FREEFF,Available ZP location
+0279,CONTROL_SAVE,Control Register Save
+A7F8,PARAM1,Parameter 1?
+A7F9,PARAM2,Parameter 2?
+B883,DO_BRAK,Perform []
+BD84,FRMNUM,Confirm Result
+BD98,FRMEVL,Evaluate Expression in Text
+BEF5,TSTCOMMA,Test comma-
+BF00,SYNERR,Output ?SYNTAX Error
+C2EA,AYINT,FAC#1 to Positive Integer
+C8D4,EVAL_BP,Eval Byte Parameter
+C92D,GETADR,Convert FAC#1 to Integer in LINNUM
+CD51,ROUND,Round FAC#1
+D399,ROM_CHRGET,CHRGET For Zero-page
+EFFF,CONTROL_REG,Control Register
+[TABLES]
+E92A,E937,T,Command Table
+E938,E945,H,command vector HI
+E946,E953,H,command vector LO
+E956,E956.H.bit command
+E987,E987,H,bit command
+E98A,E98A,H,bit command
+E98D,E98D,H,bit command
+EBC7,EBC7,H,bit command
+EBCA,EBCA,H,bit command
+EE72,EE72,H,bit command
+EFB9,EFC0,H,unknown
+EFC1,EFC6,H,filler
+[LABELS]
+E918,JTTarget10
+E921,DO_CMD
+E92A,CMDS,Commands
+E938,CMDVEC_HI,Command Vector HI
+E946,CMDVEC_LO,Command Vector LO
+E954,CMD_O
+E972,CMD_P
+E985,CMD_S
+E988,CMD_R
+E98B,CMD_F
+E98E,CMD_D
+E9A4,CMD_LINE
+EA01,JTTarget13
+EAEA,TraceEAEA
+EB14,TraceEB14
+EB2C,JTTarget14
+EB5C,TraceEB5C
+EBA7,CMD_E
+EBB8,JTTarget17
+EBC5,CMD_8B
+EBC8,CMD_T
+EBCB,CMD_A4
+EC14,JTTarget18
+EC51,TraceEC51
+EC72,JTTarget11
+EC9F,JTTarget19
+ECE0,TraceECE0
+ED74,CMD_M
+ED93,JTTarget15
+EDC5,TraceEDC5
+EE70,CMD_C
+EE72,CMD_I
+EE7D,JTTarget16
+EEC0,JTTarget07
+EECA,JTTarget08
+EEF4,JTTarget09
+EF23,TraceEF23
+EF2D,JTTarget12
+EF34,JTTarget03
+EF53,JTTarget04
+EF5E,TraceEF5E
+EF70,JTTarget02
+EF73,TraceEF73
+EF77,JTTarget05
+EF78,TraceEF78
+EF80,JTTarget01
+EF89,JTTarget06
+EFB9,TABLE1,Unknown Table #1
+[COMMENTS]
+E900,=,Start of SuperSoft Code
+E902,-.Entry point for SYS commands 59650
+E92A,-,Command Table
+E938,-,Command Vectors
+E954,=,"O" and "K" COMMANDS. Unknown. K=KILL?? Appears to restore CHRGET routine
+E966,i,$E455 is default IRQ Vector
+E972,=,"P" COMMAND. Unknown.
+E985,=,"S" COMMANDS. +"P"=Set Point. +"L"=Set Line
+E988,=,"R" COMMAND. Reset Line.
+E98B,=,"F" COMMAND. +"L"=Flip Line. +"P"=Flip Point
+E98E,=,"D" COMMAND. Dot Line.
+E99A,i,Check second character. Is it "L"? L=Line.
+EBA7,=,"E" COMMAND. Examine.
+EBC5,=,$8B COMMAND (RVS K). Unknown.
+EBC8,=,"T" COMMAND. Text. +"NH"=Normal Horizontal
+EBCB,=,$A4 COMMAND (RVS $). Unknown.
+EBDB,i,Is it "R"?
+EBDF,i,Is it "N"?
+EBE8,i,Is it "H"?
+EBEC,i,Is it "V"?
+EC60,i,Is it COMMA?
+ED74,=,"M" COMMAND. Map Erase, Map Fill.
+EE70,=,"C" COMMAND. Clear
+EE72,=,"I" COMMAND. Invert
+EFB9,=,These appear to be offsets into the BITMAP space
+EFC7,=,JUMP TABLE

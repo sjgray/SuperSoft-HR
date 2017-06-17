@@ -1,0 +1,656 @@
+SuperSoft High Resolution Graphics Boards (C)1982 HR40B, HR80, HR82
+===================================================================
+
+Compiled by Steve Gray, Feb 13/2014  Updated: Jun 6/2017
+
+BOARD DIFFERENCES
+-----------------
+
+HR40: Supersoft logo at LOGO1, Missing U2
+HR80: Supersoft logo at LOGO2, trace differences around U1/U2
+HR82: Has additional BLUE wire near U21/U26 that goes through added hole in board
+
+
+BOARD LAYOUT
+------------
+
+*********************************************************************************************************
+* LOGO1													*
+*	    MOUNT	[RED WIRE]	[DIP WIRES]	[U17]		[U22]		     [YEL WIRE]	*
+*	    HOLE					6116 SRAM	UD7 Header			*
+*							2K x 8		(to motherboard)		*
+*	[U1]		[U7]		[U14]								*
+*	SN74LS373	74LS02		74LS157N							*
+* (C)													*
+* 1982	[U2]		[U8]		[U15]		[U18]		[U23]				*
+*	SN74LS157N	74LS32		74LS157N	6116 SRAM	UD7 EPROM			*
+* SUPER							2K x 8		($E000-EFFF firmware)		*
+* SOFT	[U3]		[U9]		[U16]								*
+*	SN74LS00N	SN74LS00N	74LS157N							*
+*													*
+* LOGO2	[U4]		[U10]		[WIRES]		[U19]		[U24]				*
+*	SN74LS00N	74LS02		(see note)	6116 SRAM	UD12 ROM socket			*
+*							2K x 8		($9000-9FFF)			*
+* [U5]				[U11]									*
+* 2716 EPROM			SN74LS175N								*
+*							[U20]		[U25]				*
+*				[U12]			6116 SRAM	UD11 ROM socket			*
+* [U6]				SN74LS157N		2K x 8		($A000-AFFF)			*
+* UA3 Header												*
+* (to motherboard)		[U13]			[U21]		[U26]				*
+*				SN74LS139N		SN74LS245N	SN74LS133N		MOUNT	*
+*								[BLUE WIRE]			HOLE	*
+*					HIGH   RESOLUTION   GRAPHICS   BOARD				*
+*********************************************************************************************************
+			NOTE: Chip Reference have been assigned by myself
+
+CHIP LIST
+---------
+
+PART	QTY	DESC
+
+74LS00	3	Quad 2-input NAND gate
+74LS02	2	Quad 2-input NOR
+74LS133	1	13-input NAND gate
+74LS139	1	Dual 2 to 4-line decoder/demultiplexer
+74LS157	5	Quad 2-line to 1-line data selector/multiplexer, noninverting
+74LS175 2	Quad flip-flop
+74LS245	1	Octal bus transceiver with noninverted 3-state outputs
+74LS373 1	Octal latch with 3-state output
+6116-3	4	2K x 8 Static RAM (or AM9128)
+2532	1	4K x 8 EPROM 
+2716	4	2K x 8 EPROM
+
+
+CONNECTIONS
+-----------
+
+PCB mounts onto:
+* UA3 (character ROM)
+* UD7 (Editor ROM - $E000-EFFF)
+
+Red wire...: UB3-pin 11 or UB8-pin 11 (Video Latch Enable)
+Yellow wire: UE4-pin 11 (CLK1 - Video timing)
+Blue wire..: HR82 only - ??????
+
+FLYOUTS
+-------
+  HR80     HR40B    CONNECTION TO PET MOTHERBOARD
+* Brown  / Blue    J4-pin 17 (/SEL 9 - Memory addressing)
+* Red    / Purple  J4-pin 18 (/SEL A - Memory addressing)
+* Orange / Grey    J9-pin 14 (BA12 - Buffered Memory address)
+* Yellow / White   J9-pin 21 (C02 / PHI2  - clock timing)
+* Green  / Black   J9-pin 22 (BR/W - Buffered Read/Write)
+
+
+DIL........: UB13-Pin 4 to 13 (CRTC TA0-TA9 Video memory address)
+- HR40B: Br,Red,Or,Yel,Grn,Blu,Pur,Gray,Wh,Blk
+- HR80 : 
+MEMORY MAP
+----------
+
+RAM: 8K total, at $9000-AFFF (36864-45055)
+- $9000-9FFF - Can select RAM or ROM
+- $A000-AFFF - Can select RAM or ROM
+- Clearing screen sets RAM to $FF
+
+Control Register: $EFFF (61439)
+- Bit 0:
+- Bit 1:
+- Bit 2:
+- Bit 3:
+
+
+
+NETLIST
+-------
+Format: PART-PIN = FUNCTION > PART-PIN, PART-PIN 
+        Defines a connection from one point to one or more points
+
+Key: Uxx=Connection to chip x, [xxxx]=Connection to point xxxx (ie: wire, resistor, cap etc)
+     NC=No connection, NV=Not Visible, HUx=Hidden Under chip x
+
+
+***** 74LS373N - Octal latch with 3-state output
+U1-1  = /OC > hu11
+U1-2  = 1Q  > hu2
+U1-3  = 1D  > nv
+U1-4  = 2D  > nv
+U1-5  = 2Q  > U2-2
+U1-6  = 3Q  > U2-11
+U1-7  = 3D  > nv
+U1-8  = 4D  > nv
+U1-9  = 4Q  > U2-14
+U1-10 = GND > U2-15
+U1-11 = C   > U7-4
+U1-12 = 5Q  > hu2
+U1-13 = 5D  > hu17
+U1-14 = 6D  > hu17 
+U1-15 = 6Q  > U2-5
+U1-16 = 7Q  > U2-13
+U1-17 = 7D  > U17-16
+U1-18 = 8D  > U17-15
+U1-19 = 8Q  > nv
+U1-20 = VCC >
+
+***** 74LS157 - Quad 2-line to 1-line data selector/multiplexer, noninverting
+U2-1  = SEL  > nv
+U2-2  = 1A   > U1-5
+U2-3  = 1B2  > hu2
+U2-4  = 1Y   > U4-13
+U2-5  = 2A   > U1-15
+U2-6  = 2B   > nv
+U2-7  = 2Y   > U3-2
+U2-8  = GND  >
+U2-9  = 3Y   > U3-4
+U2-10 = 3B   > nv
+U2-11 = 3A   > U1-6
+U2-12 = 4Y   > U3-1
+U2-13 = 4B   > U1-16
+U2-14 = 4A   > U1-9
+U2-15 = /STR > hu2
+U2-16 = VCC
+
+***** 74LS00 - Quad 2-input NAND gate
+U3-1  = 1A  > U2-12
+U3-2  = 1B  > hu4
+U3-3  = 1Y  > hu4
+U3-4  = 2A  > U2-9, U4-10
+U3-5  = 2B  > hu4
+U3-6  = 2Y  > hu4
+U3-7  = GND >
+U3-8  = 3Y  > nv
+U3-9  = 3A  > nv
+U3-10 = 3B  > nv
+U3-11 = 4Y  > nv
+U3-12 = 4A  > hu4
+U3-13 = 4B  > U4-1
+U3-14 = VCC >
+
+***** 74LS00 - Quad 2-input NAND gate
+U4-1  = 1A  > U3-13
+U4-2  = 1B  > hu5
+U4-3  = 1Y  > hu6
+U4-4  = 2A  > nv
+U4-5  = 2B  > U5-10
+U4-6  = 2Y  > hu5
+U4-7  = GND > 
+U4-8  = 3Y  > nv
+U4-9  = 3A  > U5-11
+U4-10 = 3B  > U3-4
+U4-11 = 4Y  > hu6
+U4-12 = 4A  > U5-9
+U4-13 = 4B  > U2-4, hu4
+U4-14 = VCC >
+
+***** 2716 EPROM, 2K x 8
+U5-1  = A7  > hu6
+U5-2  = A6  > hu6
+U5-3  = A5  > hu6
+U5-4  = A4  > hu6
+U5-5  = A3  > hu6
+U5-6  = A2  > hu6
+U5-7  = A1  > hu6
+U5-8  = A0  > hu6
+U5-9  = D0  >
+U5-10 = D1  >
+U5-11 = D2  >
+U5-12 = GND >
+U5-13 = D3  >
+U5-14 = D4  >
+U5-15 = D5  >
+U5-16 = D6  >
+U5-17 = D7  >
+U5-18 = /OE > hu6
+U5-19 = A10 > hu6
+U5-20 = /CE >
+U5-21 = VPP > hu6
+U5-22 = A9  > hu6
+U5-23 = A8  > hu6
+U5-24 = VCC >
+
+***** HEADER, 2332 Character ROM - 4K x 8
+U6-1  = A7   >
+U6-2  = A6   >
+U6-3  = A5   >
+U6-4  = A4   >
+U6-5  = A3   >
+U6-6  = A2   >
+U6-7  = A1   >
+U6-8  = A0   >
+U6-9  = D0   >
+U6-10 = D1   >
+U6-11 = D2   >
+U6-12 = GND  >
+U6-13 = D3   >
+U6-14 = D4   >
+U6-15 = D5   >
+U6-16 = D6   >
+U6-17 = D7   >
+U6-18 = A11  >
+U6-19 = A10  >
+U6-20 = /CE1 >
+U6-21 = CE2  >
+U6-22 = A9   >
+U6-23 = A8   >
+U6-24 = VCC  >
+
+***** 74LS02 - Quad 2-input NOR
+U7-1  = /1Y > 
+U7-2  = 1A  >
+U7-3  = 1B  >
+U7-4  = /2Y >
+U7-5  = 2A  >
+U7-6  = 2B  >
+U7-7  = GND > 
+U7-8  = 3A  >
+U7-9  = 3B  >
+U7-10 = /3Y >
+U7-11 = 4A  >
+U7-12 = 4B  >
+U7-13 = 4Y  >
+U7-14 = VCC >
+
+***** 74LS02 - Quad 2-input NOR
+U8-1  = /1Y > 
+U8-2  = 1A  >
+U8-3  = 1B  >
+U8-4  = /2Y >
+U8-5  = 2A  >
+U8-6  = 2B  >
+U8-7  = GND > 
+U8-8  = 3A  >
+U8-9  = 3B  >
+U8-10 = /3Y >
+U8-11 = 4A  >
+U8-12 = 4B  >
+U8-13 = 4Y  >
+U8-14 = VCC >
+
+***** 74LS00 - Quad 2-input NAND gate
+U9-1  = 1A  >
+U9-2  = 1B  >
+U9-3  = 1Y  >
+U9-4  = 2A  >
+U9-5  = 2B  >
+U9-6  = 2Y  >
+U9-7  = GND >
+U9-8  = 3Y  >
+U9-9  = 3A  >
+U9-10 = 3B  >
+U9-11 = 4Y  >
+U9-12 = 4A  >
+U9-13 = 4B  >
+U9-14 = VCC >
+
+***** 74LS02 - Quad 2-input NOR
+U10-1  = /1Y > 
+U10-2  = 1A  >
+U10-3  = 1B  >
+U10-4  = /2Y >
+U10-5  = 2A  >
+U10-6  = 2B  >
+U10-7  = GND > 
+U10-8  = 3A  >
+U10-9  = 3B  >
+U10-10 = /3Y >
+U10-11 = 4A  >
+U10-12 = 4B  >
+U10-13 = 4Y  >
+U10-14 = VCC >
+
+***** 74LS175 - Quad flip-flop
+U11-1  = /CLR >
+U11-2  = 1Q   >
+U11-3  = /1Q  >
+U11-4  = 1D   >
+U11-5  = 2D   >
+U11-6  = /2Q  >
+U11-7  = 2Q   >
+U11-8  = GND  >
+U11-9  = CLK  >
+U11-10 = 3Q   >
+U11-11 = /3Q  >
+U11-12 = 3D   >
+U11-13 = 4D   >
+U11-14 = /4Q  >
+U11-15 = 4Q   >
+U11-16 = VCC  >
+
+***** 74LS157 - Quad 2-line to 1-line data selector/multiplexer, noninverting
+U12-1  = SEL >
+U12-2  = 1A  > 
+U12-3  = 1B2 >
+U12-4  = 1Y  >
+U12-5  = 2A  >
+U12-6  = 2B  >
+U12-7  = 2Y  >
+U12-8  = GND >
+U12-9  = 3Y  >
+U12-10 = 3B  >
+U12-11 = 3A  >
+U12-12 = 4Y  >
+U12-13 = 4B  >
+U12-14 = 4A  >
+U12-15 = /STR>
+U12-16 = VCC
+
+***** 74LS139 - Dual 2 to 4-line decoder/demultiplexer
+U13-1  = 1G  >
+U13-2  = 1A  >
+U13-3  = 1B  >
+U13-4  = 1Y0 >
+U13-5  = 1Y1 >
+U13-6  = 1Y2 >
+U13-7  = 1Y3 >
+U13-8  = GND >
+U13-9  = 2Y3 >
+U13-10 = 2Y2 >
+U13-11 = 2Y1 >
+U13-12 = 2Y0 >
+U13-13 = 2B  >
+U13-14 = 2A  >
+U13-15 = 2G  >
+U13-16 = VCC >
+
+***** 74LS157 - Quad 2-line to 1-line data selector/multiplexer, noninverting
+U14-1  = SEL >
+U14-2  = 1A  > 
+U14-3  = 1B2 >
+U14-4  = 1Y  >
+U14-5  = 2A  >
+U14-6  = 2B  >
+U14-7  = 2Y  >
+U14-8  = GND >
+U14-9  = 3Y  >
+U14-10 = 3B  >
+U14-11 = 3A  >
+U14-12 = 4Y  >
+U14-13 = 4B  >
+U14-14 = 4A  >
+U14-15 = /STR>
+U14-16 = VCC >
+
+***** 74LS157 - Quad 2-line to 1-line data selector/multiplexer, noninverting
+U15-1  = SEL >
+U15-2  = 1A  > 
+U15-3  = 1B2 >
+U15-4  = 1Y  >
+U15-5  = 2A  >
+U15-6  = 2B  >
+U15-7  = 2Y  >
+U15-8  = GND >
+U15-9  = 3Y  >
+U15-10 = 3B  >
+U15-11 = 3A  >
+U15-12 = 4Y  >
+U15-13 = 4B  >
+U15-14 = 4A  >
+U15-15 = /STR>
+U15-16 = VCC >
+
+***** 74LS157 - Quad 2-line to 1-line data selector/multiplexer, noninverting
+U16-1  = SEL >
+U16-2  = 1A  > 
+U16-3  = 1B2 >
+U16-4  = 1Y  >
+U16-5  = 2A  >
+U16-6  = 2B  >
+U16-7  = 2Y  >
+U16-8  = GND >
+U16-9  = 3Y  >
+U16-10 = 3B  >
+U16-11 = 3A  >
+U16-12 = 4Y  >
+U16-13 = 4B  >
+U16-14 = 4A  >
+U16-15 = /STR>
+U16-16 = VCC >
+
+***** 6116-3 SRAM - 2K x 8
+U17-1  = A7  >
+U17-2  = A6  >
+U17-3  = A5  >
+U17-4  = A4  >
+U17-5  = A3  >
+U17-6  = A2  >
+U17-7  = A1  >
+U17-8  = A0  >
+U17-9  = D0  >
+U17-10 = D1  >
+U17-11 = D2  >
+U17-12 = GND >
+U17-13 = D3  >
+U17-14 = D4  >
+U17-15 = D5  >
+U17-16 = D6  >
+U17-17 = D7  >
+U17-18 = /CS >
+U17-19 = A10 >
+U17-20 = /OE >
+U17-21 = /W  >
+U17-22 = A9  >
+U17-23 = A8  >
+U17-24 = VCC >
+
+***** 6116-3 SRAM - 2K x 8
+U18-1  = A7  >
+U18-2  = A6  >
+U18-3  = A5  >
+U18-4  = A4  >
+U18-5  = A3  >
+U18-6  = A2  >
+U18-7  = A1  >
+U18-8  = A0  >
+U18-9  = D0  >
+U18-10 = D1  >
+U18-11 = D2  >
+U18-12 = GND >
+U18-13 = D3  >
+U18-14 = D4  >
+U18-15 = D5  >
+U18-16 = D6  >
+U18-17 = D7  >
+U18-18 = /CS >
+U18-19 = A10 >
+U18-20 = /OE >
+U18-21 = /W  >
+U18-22 = A9  >
+U18-23 = A8  >
+U18-24 = VCC >
+
+***** 6116-3 SRAM - 2K x 8
+U19-1  = A7  >
+U19-2  = A6  >
+U19-3  = A5  >
+U19-4  = A4  >
+U19-5  = A3  >
+U19-6  = A2  >
+U19-7  = A1  >
+U19-8  = A0  >
+U19-9  = D0  >
+U19-10 = D1  >
+U19-11 = D2  >
+U19-12 = GND >
+U19-13 = D3  >
+U19-14 = D4  >
+U19-15 = D5  >
+U19-16 = D6  >
+U19-17 = D7  >
+U19-18 = /CS >
+U19-19 = A10 >
+U19-20 = /OE >
+U19-21 = /W  >
+U19-22 = A9  >
+U19-23 = A8  >
+U19-24 = VCC >
+
+***** 6116-3 SRAM - 2K x 8
+U20-1  = A7  >
+U20-2  = A6  >
+U20-3  = A5  >
+U20-4  = A4  >
+U20-5  = A3  >
+U20-6  = A2  >
+U20-7  = A1  >
+U20-8  = A0  >
+U20-9  = D0  >
+U20-10 = D1  >
+U20-11 = D2  >
+U20-12 = GND >
+U20-13 = D3  >
+U20-14 = D4  >
+U20-15 = D5  >
+U20-16 = D6  >
+U20-17 = D7  >
+U20-18 = /CS >
+U20-19 = A10 >
+U20-20 = /OE >
+U20-21 = /W  >
+U20-22 = A9  >
+U20-23 = A8  >
+U20-24 = VCC >
+
+***** 74LS245 - Octal bus transceiver with noninverted 3-state outputs
+U21-1  = DIR >
+U21-2  = A1  >
+U21-3  = A2  >
+U21-4  = A3  >
+U21-5  = A4  >
+U21-6  = A5  >
+U21-7  = A6  >
+U21-8  = A7  >
+U21-9  = A8  >
+U21-10 = GND >
+U21-11 = B8  >
+U21-12 = B7  >
+U21-13 = B6  >
+U21-14 = B5  >
+U21-15 = B4  >
+U21-16 = B3  >
+U21-17 = B2  >
+U21-18 = B1  >
+U21-19 = /E  >
+U21-20 = VCC >
+
+***** HEADER, 2332 ROM - 4K x 8
+U22-1  = A7   >
+U22-2  = A6   >
+U22-3  = A5   >
+U22-4  = A4   >
+U22-5  = A3   >
+U22-6  = A2   >
+U22-7  = A1   >
+U22-8  = A0   >
+U22-9  = D0   >
+U22-10 = D1   >
+U22-11 = D2   >
+U22-12 = GND  >
+U22-13 = D3   >
+U22-14 = D4   >
+U22-15 = D5   >
+U22-16 = D6   >
+U22-17 = D7   >
+U22-18 = A11  >
+U22-19 = A10  >
+U22-20 = /CE1 >
+U22-21 = CE2  >
+U22-22 = A9   >
+U22-23 = A8   >
+U22-24 = VCC  >
+
+***** 2732 EPROM - 4K x 8
+U23-1  = A7   >
+U23-2  = A6   >
+U23-3  = A5   >
+U23-4  = A4   >
+U23-5  = A3   >
+U23-6  = A2   >
+U23-7  = A1   >
+U23-8  = A0   >
+U23-9  = D0   >
+U23-10 = D1   >
+U23-11 = D2   >
+U23-12 = GND  >
+U23-13 = D3   >
+U23-14 = D4   >
+U23-15 = D5   >
+U23-16 = D6   >
+U23-17 = D7   >
+U23-18 = /OE  >
+U23-19 = A10  >
+U23-20 = /CE  >
+U23-21 = A11  >
+U23-22 = A9   >
+U23-23 = A8   >
+U23-24 = VCC  >
+
+***** 2332 ROM - 4K x 8, replaces UD12 on PET motherboard
+U24-1  = A7   >
+U24-2  = A6   >
+U24-3  = A5   >
+U24-4  = A4   >
+U24-5  = A3   >
+U24-6  = A2   >
+U24-7  = A1   >
+U24-8  = A0   >
+U24-9  = D0   >
+U24-10 = D1   >
+U24-11 = D2   >
+U24-12 = GND  >
+U24-13 = D3   >
+U24-14 = D4   >
+U24-15 = D5   >
+U24-16 = D6   >
+U24-17 = D7   >
+U24-18 = A11  >
+U24-19 = A10  >
+U24-20 = /CE1 >
+U24-21 = CE2  >
+U24-22 = A9   >
+U24-23 = A8   >
+U24-24 = VCC  >
+
+***** 2332 ROM - 4K x 8, replaces UD11 on PET motherboard
+U25-1  = A7   >
+U25-2  = A6   >
+U25-3  = A5   >
+U25-4  = A4   >
+U25-5  = A3   >
+U25-6  = A2   >
+U25-7  = A1   >
+U25-8  = A0   >
+U25-9  = D0   >
+U25-10 = D1   >
+U25-11 = D2   >
+U25-12 = GND  >
+U25-13 = D3   >
+U25-14 = D4   >
+U25-15 = D5   >
+U25-16 = D6   >
+U25-17 = D7   >
+U25-18 = A11  >
+U25-19 = A10  >
+U25-20 = /CE1 >
+U25-21 = CE2  >
+U25-22 = A9   >
+U25-23 = A8   >
+U25-24 = VCC  >
+
+***** 74LS133 - 13-input NAND gate, Inputs A-H, Output Y
+U26-1  = A   >
+U26-2  = B   >
+U26-3  = C   >
+U26-4  = D   >
+U26-5  = E   >
+U26-6  = F   >
+U26-7  = G   >
+U26-8  = GND >
+U26-9  = OUT >
+U26-10 = H   >
+U26-11 = I   >
+U26-12 = J   >
+U26-13 = K   >
+U26-14 = L   >
+U26-15 = M   >
+U26-16 = VCC >
