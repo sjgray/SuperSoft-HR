@@ -3,6 +3,7 @@ SuperSoft HR Commands
 
 All commands start with SYS HR, where HR is $E902 
 
+Set Mode.......: n			where n is 0 to 7
 Set Point......: SP,X,Y  		(white)
 Reset Point....: RP,X,Y  		(black)
 Flip Point.....: FP,X,Y  		(xor)
