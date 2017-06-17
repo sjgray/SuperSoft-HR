@@ -1,6 +1,7 @@
 [PROJECT]
 E900
 [ENTRYPT]
+E900,Main Entry Point (actually E902)
 EFC7,e1
 EFCA,e2
 EFCD,e3
