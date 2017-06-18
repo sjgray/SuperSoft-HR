@@ -1,7 +1,39 @@
-*=$E900
+*=$E7E9
 ;
 ; ---- Code
 ;
+;================================================================================
+; This is located in an unused area at the end of the Editor ROM
+;================================================================================
+;
+L_E7E9:
+E7E9: A2 07     LDX #$07                                    
+E7EB: A0 07     LDY #$07                                    
+;
+L_E7ED:
+E7ED: B1 B7     LDA (TMPB7),Y                                ;Temp Data Area (64#00A3)
+E7EF: 9D F7 87  STA $87F7,X                                 
+E7F2: CA        DEX                                         
+E7F3: 88        DEY                                         
+E7F4: 10 F7     BPL L_E7ED                                  
+E7F6: 24 CB     BIT CMP0                                     ;Tape Timing Constants
+E7F8: 10 03     BPL L_E7FD                                  
+E7FA: 4C D6 EC  JMP L_ECD6                                  
+;
+L_E7FD:
+E7FD: 4C DE EC  JMP L_ECDE                                  
+;================================================================================
+; This area is normally hidden under the IO area from $E800-E8FF
+;================================================================================
+;
+L_E800:
+E800:           !TEXT "COPYRIGHT 1982 SUPERSOFT. 10-14 CANNING ROA" ;Hidden IO Area - Copyright
+E82B:           !TEXT "D, WEALDSTONE, HARROW, MIDDLESEX. UNAUTHORI" ;Hidden IO Area - Copyright
+E856:           !TEXT "SED REPRODUCTION IS STRICTLY PROHIBITED. SO" ;Hidden IO Area - Copyright
+E881:           !TEXT "FTWARE WRITTEN BY NJ RICHMAN. HARWARE DESIG" ;Hidden IO Area - Copyright
+E8AC:           !TEXT "NED AND MANUFACTURED BY MG BIGNELL AND M HU" ;Hidden IO Area - Copyright
+E8D7:           !TEXT "MPHREY.SERIAL NUMBER OF THIS UNIT =414480" ;Hidden IO Area - Copyright
+ 
 ;================================================================================
 ; Start of SuperSoft Code
 ;================================================================================
@@ -65,7 +97,7 @@ E946:           !BYTE $53,$53,$71,$CA,$C4,$C7,$73,$A6       ;command vector LO
 E94E:           !BYTE $6F,$72,$87,$8A,$8D,$84               ;command vector LO
  
 ;================================================================================
-; "O" and "K" COMMANDS. Unknown. K=KILL?? Appears to restore CHRGET routine
+; "O" and "K" COMMANDS. Unknown. O=Off or K=KILL?? Appears to restore CHRGET routine
 ;================================================================================
 ;
 CMD_O:
@@ -88,12 +120,12 @@ E963: 10 F4     BPL L_E959
 E965: 78        SEI                                         
 E966: A9 55     LDA #$55                                    ; $E455 is default IRQ Vector
 E968: A0 E4     LDY #$E4                                    
-E96A: 85 90     STA CINV                                     ;Vector: Hardware Interrupt
-E96C: 84 91     STY $91                                     
+E96A: 85 90     STA CINV-LO                                  ;Vector: Hardware Interrupt LO
+E96C: 84 91     STY CINV-HI                                  ;Vector: Hardware Interrupt HI
 E96E: 58        CLI                                         
 E96F: 4C 70 00  JMP CHRGET                                   ;Subroutine: Get Next Byte of BASIC Text
 ;================================================================================
-; "P" COMMAND. Unknown.
+; "P" COMMAND. Set Pointer to Character Set
 ;================================================================================
 ;
 CMD_P:
@@ -101,8 +133,8 @@ E972: 20 70 00  JSR CHRGET                                   ;Subroutine: Get Ne
 E975: 20 F5 BE  JSR TSTCOMMA                                 ;Test comma-
 E978: 20 84 BD  JSR FRMNUM                                   ;Confirm Result
 E97B: 20 2D C9  JSR GETADR                                   ;Convert FAC#1 to Integer in LINNUM
-E97E: 8C F8 A7  STY PARAM1                                   ;Parameter 1?
-E981: 8D F9 A7  STA PARAM2                                   ;Parameter 2?
+E97E: 8C F8 A7  STY CHR_PTR_LO                               ;Character Pointer LO
+E981: 8D F9 A7  STA CHR_PTR_HI                               ;Character Pointer HI
 E984: 60        RTS                                         
 ;
 ;================================================================================
@@ -671,14 +703,14 @@ ECA9: 26 B8     ROL $B8
 ECAB: 0A        ASL                                         
 ECAC: 26 B8     ROL $B8                                     
 ECAE: 18        CLC                                         
-ECAF: 6D F8 A7  ADC PARAM1                                   ;Parameter 1?
+ECAF: 6D F8 A7  ADC CHR_PTR_LO                               ;Character Pointer LO
 ECB2: 85 B7     STA TMPB7                                    ;Temp Data Area (64#00A3)
 ECB4: A5 B8     LDA $B8                                     
-ECB6: 6D F9 A7  ADC PARAM2                                   ;Parameter 2?
+ECB6: 6D F9 A7  ADC CHR_PTR_HI                               ;Character Pointer HI
 ECB9: 85 B8     STA $B8                                     
 ECBB: A0 00     LDY #$00                                    
 ECBD: 84 CB     STY CMP0                                     ;Tape Timing Constants
-ECBF: 2C F9 A7  BIT PARAM2                                   ;Parameter 2?
+ECBF: 2C F9 A7  BIT CHR_PTR_HI                               ;Character Pointer HI
 ECC2: 10 0F     BPL L_ECD3                                  
 ECC4: C6 CB     DEC CMP0                                     ;Tape Timing Constants
 ECC6: BA        TSX                                         
@@ -691,10 +723,14 @@ ECCE: F0 FB     BEQ L_ECCB
 ECD0: 8C FF EF  STY CONTROL_REG                              ;Control Register
 ;
 L_ECD3:
-ECD3: 4C E9 E7  JMP $E7E9                                   
+ECD3: 4C E9 E7  JMP L_E7E9                                  ; Jump to patch area in Editor ROM area
+;
+L_ECD6:
 ECD6: AD 79 02  LDA CONTROL_SAVE                             ;Control Register Save
 ECD9: 09 01     ORA #$01                                    
 ECDB: 8D FF EF  STA CONTROL_REG                              ;Control Register
+;
+L_ECDE:
 ECDE: 20 2C EB  JSR JTTarget14                              
 ECE1: 84 FF     STY FREEFF                                   ;Available ZP location
 ECE3: A9 00     LDA #$00                                    

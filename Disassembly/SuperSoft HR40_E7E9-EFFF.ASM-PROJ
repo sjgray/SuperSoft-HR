@@ -1,5 +1,5 @@
 [PROJECT]
-E900
+E7E9
 [ENTRYPT]
 E900,Main Entry Point (actually E902)
 EFC7,e1
@@ -45,7 +45,8 @@ EFFD,e19
 0063,FACSGN,Floating Accum.   #1: Sign
 0070,CHRGET,Subroutine: Get Next Byte of BASIC Text
 0076,CHRGOT,Entry to Get Same Byte of Text Again
-0090,CINV  ,Vector: Hardware Interrupt
+0090,CINV-LO,Vector: Hardware Interrupt LO
+0091,CINV-HI,Vector: Hardware Interrupt HI
 0094,NMINV ,Vector: Non-Maskable Interrupt
 0096,STATUS,Kernal I/O Status Word: ST
 0097,LSTX  ,Current Key Pressed: 255 = No Key
@@ -84,8 +85,8 @@ EFFD,e19
 00FD,MEMUSS,Tape Load Temps
 00FF,FREEFF,Available ZP location
 0279,CONTROL_SAVE,Control Register Save
-A7F8,PARAM1,Parameter 1?
-A7F9,PARAM2,Parameter 2?
+A7F8,CHR_PTR_LO,Character Pointer LO
+A7F9,CHR_PTR_HI,Character Pointer HI
 B883,DO_BRAK,Perform []
 BD84,FRMNUM,Confirm Result
 BD98,FRMEVL,Evaluate Expression in Text
@@ -98,6 +99,7 @@ CD51,ROUND,Round FAC#1
 D399,ROM_CHRGET,CHRGET For Zero-page
 EFFF,CONTROL_REG,Control Register
 [TABLES]
+E800,E8FF,T,Hidden IO Area - Copyright
 E92A,E937,T,Command Table
 E938,E945,H,command vector HI
 E946,E953,H,command vector LO
@@ -160,15 +162,17 @@ EF80,JTTarget01
 EF89,JTTarget06
 EFB9,TABLE1,Unknown Table #1
 [COMMENTS]
+E7E9,=,This is located in an unused area at the end of the Editor ROM
+E800,=,This area is normally hidden under the IO area from $E800-E8FF
 E900,=,Start of SuperSoft Code
 E902,-.Entry point for SYS commands 59650
 E918,-,If the command was not found use the value for the Control Register
 E921,-,Push the target address on the stack and jump to it using RTS
 E92A,-,Command Table
 E938,-,Command Vectors
-E954,=,"O" and "K" COMMANDS. Unknown. K=KILL?? Appears to restore CHRGET routine
+E954,=,"O" and "K" COMMANDS. Unknown. O=Off or K=KILL?? Appears to restore CHRGET routine
 E966,i,$E455 is default IRQ Vector
-E972,=,"P" COMMAND. Unknown.
+E972,=,"P" COMMAND. Set Pointer to Character Set
 E985,=,"S" COMMANDS. +"P"=Set Point. +"L"=Set Line
 E988,=,"R" COMMAND. Reset Line.
 E98B,=,"F" COMMAND. +"L"=Flip Line. +"P"=Flip Point
@@ -183,6 +187,7 @@ EBDF,i,Is it "N"?
 EBE8,i,Is it "H"?
 EBEC,i,Is it "V"?
 EC60,i,Is it COMMA?
+ECD3,i,Jump to patch area in Editor ROM area
 ED74,=,"M" COMMAND. Map Erase, Map Fill.
 EE70,=,"C" COMMAND. Clear
 EE72,=,"I" COMMAND. Invert
