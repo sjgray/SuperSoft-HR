@@ -4,18 +4,25 @@ SuperSoft HR Commands
 All commands start with SYS HR, where HR is $E902 
 
 Set Mode.......: n			where n is 0 to 7
+
 Set Point......: SP,X,Y  		(white)
 Reset Point....: RP,X,Y  		(black)
 Flip Point.....: FP,X,Y  		(xor)
 
 Examine........: E,X,Y   		(Sets ST to 0 or 1)
+
 Set Line.......: SL,X1,Y1,X2,Y2		(white)
 Reset Line.....: RL,X1,Y1,X2,Y2		(black)
 Flip Line......: FL,X1,Y1,X2,Y2		(xor)
 Dot Line.......: DL,X1,Y1,X2,Y2		(dotted line)
+
 Map Fill.......: MF,X,Y			(white)
 Map Erase......: ME,X,Y			(black)
+
 Clear..........: C			(black)
 Invert.........: I			(xor)
-Text...........: TNH,"string",X,Y	(text,normal,horizontal?)
 
+Text...........: TNH,"string",X,Y	(text,normal,horizontal)
+Text...........: TNV,"string",X,Y	(text,normal,vertical)
+Text...........: TRH,"string",X,Y	(text,reverse,horizontal)
+Text...........: TRV,"string",X,Y	(text,reverse,vertical)
