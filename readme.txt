@@ -8,6 +8,7 @@ HR80
 
 We have:
 
+\Firmware     - Original Firmware
 \Disassembly  - Contains a disassembly of the firmware
 \Docs         - Excerpt from a SuperSoft catalog showing command
 \Pictures     - Pictures of HR40 and HR80 boards
