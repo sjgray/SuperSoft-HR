@@ -4,6 +4,11 @@ SuperSoft HR Commands
 All commands start with SYS HR, where HR is $E902 hex, or 59650 decimal.
 
 Set Mode.......: n			Where 'n' is 0 to 15
+						0 = disabled
+						1 = RAM only
+						2 = Blank both screens
+						5 = Graphics + native screen
+						7 = Graphics only
 
 Set Point......: SP,X,Y  		(White)
 Reset Point....: RP,X,Y  		(Black)
