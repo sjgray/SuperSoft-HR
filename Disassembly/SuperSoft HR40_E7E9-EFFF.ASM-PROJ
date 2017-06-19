@@ -36,12 +36,15 @@ EFFD,e19
 000D,DSTAT ,Disk Status DS$ descriptor
 0010,FNUM  ,File# of current I/O device (when non-zero suppresses INPUT prompt etc)
 0011,LINNUM,Temp: Integer Value
+0012,ZP_12,Zero Page Storage 12
 0014,LASTPT,Last Temp String Address
 0016,TEMPST,Stack for Temporary Strings
 002E,STREND,Pointer End of BASIC Arrays (+1)
 0032,FRESPC,Utility String Pointer
 0034,MEMSIZ,Pointer: Highest Address Used by BASIC
 003C,DATLIN,Current DATA Line Number
+0061,ZP_61,Zero Page Storage 61
+0062,ZP_62,Zero Page Storage 62
 0063,FACSGN,Floating Accum.   #1: Sign
 0070,CHRGET,Subroutine: Get Next Byte of BASIC Text
 0076,CHRGOT,Entry to Get Same Byte of Text Again
@@ -56,7 +59,8 @@ EFFD,e19
 00B1,PRTY  ,Tape Character Parity
 00B2,DPSW  ,Flag: Tape Byte-Received
 00B3,TMPB3 ,Temporary save eg. logical address or DOS wedge
-00B7,TMPB7 ,Temp Data Area (64#00A3)
+00B7,ZP_B7 ,Zero Page Storage B7
+00B8,ZP_B8,Zero Page Storage B8
 00BB,BUFPNT,Pointer: Tape I/O Buffer #1
 00BC,BUFP2 ,Pointer: Tape I/O Buffer #2
 00BD,INBIT ,Cassette Temp (64#00A7)
@@ -67,7 +71,8 @@ EFFD,e19
 00C4,PNT   ,Pointer: Current Screen Line Address
 00C9,EAL_LO,Tape End Addresses/End of Program
 00CA,EAL_HI,Tape End Addresses/End of Program
-00CB,CMP0  ,Tape Timing Constants
+00CB,ZP_CB,Zero Page Storage CB
+00CC,ZP_CC,Zero Page Storage CC
 00CE,BITTS ,Cassette Temp (64#00B4): Tape read timer flag=IRQ enabled for Timer 1
 00CF,EOTRD ,End of tape read
 00D3,SA    ,Current Secondary Address
@@ -86,6 +91,7 @@ EFFD,e19
 00FD,MEMUSS,Tape Load Temps
 00FF,FREEFF,Available ZP location
 0279,CONTROL_SAVE,Control Register Save
+87F7,SCREEN_87F7,This is in unused 80 column video ram????
 93EC,STOR_EC,Storage EC
 93ED,STOR_ED,Storage ED
 93EE,STOR_EE,Storage EE

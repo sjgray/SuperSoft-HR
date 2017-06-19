@@ -11,12 +11,12 @@ E7E9: A2 07     LDX #$07
 E7EB: A0 07     LDY #$07                                    
 ;
 L_E7ED:
-E7ED: B1 B7     LDA (TMPB7),Y                                ;Temp Data Area (64#00A3)
-E7EF: 9D F7 87  STA $87F7,X                                 
+E7ED: B1 B7     LDA (ZP_B7),Y                                ;Zero Page Storage B7
+E7EF: 9D F7 87  STA SCREEN_87F7,X                            ;This is in unused 80 column video ram????
 E7F2: CA        DEX                                         
 E7F3: 88        DEY                                         
 E7F4: 10 F7     BPL L_E7ED                                  
-E7F6: 24 CB     BIT CMP0                                     ;Tape Timing Constants
+E7F6: 24 CB     BIT ZP_CB                                    ;Zero Page Storage CB
 E7F8: 10 03     BPL L_E7FD                                  
 E7FA: 4C D6 EC  JMP L_ECD6                                  
 ;
@@ -265,23 +265,23 @@ L_EA30:
 EA30: 38        SEC                                         
 EA31: AD F1 93  LDA STOR_F1                                  ;Storage F1
 EA34: ED F2 93  SBC STOR_F2                                  ;Storage F2
-EA37: 85 CB     STA CMP0                                     ;Tape Timing Constants
+EA37: 85 CB     STA ZP_CB                                    ;Zero Page Storage CB
 EA39: B0 0C     BCS L_EA47                                  
 EA3B: 49 FF     EOR #$FF                                    
 EA3D: 69 01     ADC #$01                                    
-EA3F: 85 CB     STA CMP0                                     ;Tape Timing Constants
+EA3F: 85 CB     STA ZP_CB                                    ;Zero Page Storage CB
 EA41: A5 FF     LDA FREEFF                                   ;Available ZP location
 EA43: 09 80     ORA #$80                                    
 EA45: 85 FF     STA FREEFF                                   ;Available ZP location
 ;
 L_EA47:
-EA47: A5 CB     LDA CMP0                                     ;Tape Timing Constants
+EA47: A5 CB     LDA ZP_CB                                    ;Zero Page Storage CB
 EA49: F0 10     BEQ L_EA5B                                  
 EA4B: A5 C1     LDA PTR2                                     ;Tape Pass 2 Error Log
 EA4D: D0 33     BNE L_EA82                                  
 EA4F: A5 C0     LDA PTR1                                     ;Tape Pass 1 Error Log
 EA51: F0 14     BEQ L_EA67                                  
-EA53: C5 CB     CMP CMP0                                     ;Tape Timing Constants
+EA53: C5 CB     CMP ZP_CB                                    ;Zero Page Storage CB
 EA55: F0 1C     BEQ L_EA73                                  
 EA57: B0 29     BCS L_EA82                                  
 EA59: 90 63     BCC L_EABE                                  
@@ -324,7 +324,7 @@ L_EA8F:
 EA8F: 20 F6 EA  JSR L_EAF6                                  
 EA92: 18        CLC                                         
 EA93: A5 B2     LDA DPSW                                     ;Flag: Tape Byte-Received
-EA95: 65 CB     ADC CMP0                                     ;Tape Timing Constants
+EA95: 65 CB     ADC ZP_CB                                    ;Zero Page Storage CB
 EA97: 85 B2     STA DPSW                                     ;Flag: Tape Byte-Received
 EA99: 90 02     BCC L_EA9D                                  
 EA9B: E6 B3     INC TMPB3                                    ;Temporary save eg. logical address or DOS wedge
@@ -350,7 +350,7 @@ EAB8: 20 78 EB  JSR L_EB78
 EABB: 4C 8F EA  JMP L_EA8F                                  
 ;
 L_EABE:
-EABE: A5 CB     LDA CMP0                                     ;Tape Timing Constants
+EABE: A5 CB     LDA ZP_CB                                    ;Zero Page Storage CB
 EAC0: 4A        LSR                                         
 EAC1: 85 B2     STA DPSW                                     ;Flag: Tape Byte-Received
 EAC3: A9 00     LDA #$00                                    
@@ -368,14 +368,14 @@ EAD6: 65 C1     ADC PTR2                                     ;Tape Pass 2 Error 
 EAD8: 85 B3     STA TMPB3                                    ;Temporary save eg. logical address or DOS wedge
 EADA: D0 06     BNE L_EAE2                                  
 EADC: A5 B2     LDA DPSW                                     ;Flag: Tape Byte-Received
-EADE: C5 CB     CMP CMP0                                     ;Tape Timing Constants
+EADE: C5 CB     CMP ZP_CB                                    ;Zero Page Storage CB
 EAE0: 90 0E     BCC L_EAF0                                  
 ;
 L_EAE2:
 EAE2: 20 F9 EA  JSR L_EAF9                                  
 EAE5: 38        SEC                                         
 EAE6: A5 B2     LDA DPSW                                     ;Flag: Tape Byte-Received
-EAE8: E5 CB     SBC CMP0                                     ;Tape Timing Constants
+EAE8: E5 CB     SBC ZP_CB                                    ;Zero Page Storage CB
 ;
 TraceEAEA:
 EAEA: 85 B2     STA DPSW                                     ;Flag: Tape Byte-Received
@@ -392,20 +392,20 @@ EAF6: 20 1C EF  JSR L_EF1C
 L_EAF9:
 EAF9: 24 FF     BIT FREEFF                                   ;Available ZP location
 EAFB: 70 0E     BVS L_EB0B                                  
-EAFD: 46 CC     LSR $CC                                     
+EAFD: 46 CC     LSR ZP_CC                                    ;Zero Page Storage CC
 EAFF: 90 07     BCC L_EB08                                  
 EB01: A9 80     LDA #$80                                    
-EB03: 85 CC     STA $CC                                     
+EB03: 85 CC     STA ZP_CC                                    ;Zero Page Storage CC
 EB05: 20 70 EF  JSR JTTarget02                              
 ;
 L_EB08:
 EB08: 4C 77 EF  JMP JTTarget05                              
 ;
 L_EB0B:
-EB0B: 06 CC     ASL $CC                                     
+EB0B: 06 CC     ASL ZP_CC                                    ;Zero Page Storage CC
 EB0D: 90 07     BCC L_EB16                                  
 EB0F: A9 01     LDA #$01                                    
-EB11: 85 CC     STA $CC                                     
+EB11: 85 CC     STA ZP_CC                                    ;Zero Page Storage CC
 EB13: 20 80 EF  JSR JTTarget01                              
 ;
 L_EB16:
@@ -470,10 +470,10 @@ EB6D: A5 BB     LDA BUFPNT                                   ;Pointer: Tape I/O 
 EB6F: C9 04     CMP #$04                                    
 EB71: F0 17     BEQ L_EB8A                                  
 EB73: 20 95 EF  JSR L_EF95                                  
-EB76: 85 CC     STA $CC                                     
+EB76: 85 CC     STA ZP_CC                                    ;Zero Page Storage CC
 ;
 L_EB78:
-EB78: A5 CC     LDA $CC                                     
+EB78: A5 CC     LDA ZP_CC                                    ;Zero Page Storage CC
 EB7A: A6 BB     LDX BUFPNT                                   ;Pointer: Tape I/O Buffer #1
 EB7C: F0 0D     BEQ L_EB8B                                  
 EB7E: E0 01     CPX #$01                                    
@@ -633,13 +633,13 @@ EC3A: 20 70 00  JSR CHRGET                                   ;Subroutine: Get Ne
 ;
 L_EC3D:
 EC3D: 20 B1 EE  JSR L_EEB1                                  
-EC40: A5 61     LDA $61                                     
-EC42: A4 62     LDY $62                                     
-EC44: 85 12     STA $12                                     
+EC40: A5 61     LDA ZP_61                                    ;Zero Page Storage 61
+EC42: A4 62     LDY ZP_62                                    ;Zero Page Storage 62
+EC44: 85 12     STA ZP_12                                    ;Zero Page Storage 12
 EC46: 84 11     STY LINNUM                                   ;Temp: Integer Value
 EC48: 20 AE EE  JSR L_EEAE                                  
-EC4B: A6 62     LDX $62                                     
-EC4D: A5 61     LDA $61                                     
+EC4B: A6 62     LDX ZP_62                                    ;Zero Page Storage 62
+EC4D: A5 61     LDA ZP_61                                    ;Zero Page Storage 61
 EC4F: F0 02     BEQ L_EC53                                  
 ;
 TraceEC51:
@@ -696,25 +696,25 @@ EC9C: 20 C3 EE  JSR L_EEC3
 ;
 JTTarget19:
 EC9F: A9 00     LDA #$00                                    
-ECA1: 85 B8     STA $B8                                     
+ECA1: 85 B8     STA ZP_B8                                    ;Zero Page Storage B8
 ECA3: A5 BC     LDA BUFP2                                    ;Pointer: Tape I/O Buffer #2
 ECA5: 0A        ASL                                         
-ECA6: 26 B8     ROL $B8                                     
+ECA6: 26 B8     ROL ZP_B8                                    ;Zero Page Storage B8
 ECA8: 0A        ASL                                         
-ECA9: 26 B8     ROL $B8                                     
+ECA9: 26 B8     ROL ZP_B8                                    ;Zero Page Storage B8
 ECAB: 0A        ASL                                         
-ECAC: 26 B8     ROL $B8                                     
+ECAC: 26 B8     ROL ZP_B8                                    ;Zero Page Storage B8
 ECAE: 18        CLC                                         
 ECAF: 6D F8 A7  ADC CHR_PTR_LO                               ;Character Pointer LO
-ECB2: 85 B7     STA TMPB7                                    ;Temp Data Area (64#00A3)
-ECB4: A5 B8     LDA $B8                                     
+ECB2: 85 B7     STA ZP_B7                                    ;Zero Page Storage B7
+ECB4: A5 B8     LDA ZP_B8                                    ;Zero Page Storage B8
 ECB6: 6D F9 A7  ADC CHR_PTR_HI                               ;Character Pointer HI
-ECB9: 85 B8     STA $B8                                     
+ECB9: 85 B8     STA ZP_B8                                    ;Zero Page Storage B8
 ECBB: A0 00     LDY #$00                                    
-ECBD: 84 CB     STY CMP0                                     ;Tape Timing Constants
+ECBD: 84 CB     STY ZP_CB                                    ;Zero Page Storage CB
 ECBF: 2C F9 A7  BIT CHR_PTR_HI                               ;Character Pointer HI
 ECC2: 10 0F     BPL L_ECD3                                  
-ECC4: C6 CB     DEC CMP0                                     ;Tape Timing Constants
+ECC4: C6 CB     DEC ZP_CB                                    ;Zero Page Storage CB
 ECC6: BA        TSX                                         
 ECC7: 98        TYA                                         
 ECC8: 9D FE 00  STA $00FE,X                                 
@@ -746,19 +746,19 @@ ECEA: 6A        ROR
 ECEB: 90 F9     BCC L_ECE6                                  
 ;
 L_ECED:
-ECED: 85 CC     STA $CC                                     
+ECED: 85 CC     STA ZP_CC                                    ;Zero Page Storage CC
 ;
 L_ECEF:
 ECEF: B1 C9     LDA (EAL_LO),Y                               ;Tape End Addresses/End of Program
 ECF1: 49 FF     EOR #$FF                                    
 ECF3: 24 BE     BIT BITCI                                    ;Cassette Temp (64#00A8)
 ECF5: 10 02     BPL L_ECF9                                  
-ECF7: 25 CC     AND $CC                                     
+ECF7: 25 CC     AND ZP_CC                                    ;Zero Page Storage CC
 ;
 L_ECF9:
 ECF9: 85 B3     STA TMPB3                                    ;Temporary save eg. logical address or DOS wedge
 ECFB: 84 FB     STY STAL                                     ;I/O Start Address
-ECFD: BD F7 87  LDA $87F7,X                                 
+ECFD: BD F7 87  LDA SCREEN_87F7,X                            ;This is in unused 80 column video ram????
 ED00: 45 B1     EOR PRTY                                     ;Tape Character Parity
 ED02: A4 FF     LDY FREEFF                                   ;Available ZP location
 ;
@@ -790,7 +790,7 @@ ED1F: C8        INY
 ED20: B1 C9     LDA (EAL_LO),Y                               ;Tape End Addresses/End of Program
 ED22: 24 BE     BIT BITCI                                    ;Cassette Temp (64#00A8)
 ED24: 10 02     BPL L_ED28                                  
-ED26: 05 CC     ORA $CC                                     
+ED26: 05 CC     ORA ZP_CC                                    ;Zero Page Storage CC
 ;
 L_ED28:
 ED28: 49 FF     EOR #$FF                                    
@@ -886,7 +886,7 @@ ED9B: 84 CF     STY EOTRD                                    ;End of tape read
 ED9D: 20 2C EB  JSR JTTarget14                              
 EDA0: 20 9E EF  JSR L_EF9E                                  
 EDA3: 20 95 EF  JSR L_EF95                                  
-EDA6: 85 CC     STA $CC                                     
+EDA6: 85 CC     STA ZP_CC                                    ;Zero Page Storage CC
 EDA8: 85 FF     STA FREEFF                                   ;Available ZP location
 ;
 L_EDAA:
@@ -911,7 +911,7 @@ EDD0: 20 A7 EF  JSR L_EFA7
 EDD3: 20 53 EF  JSR JTTarget04                              
 EDD6: 20 9E EF  JSR L_EF9E                                  
 EDD9: A5 FF     LDA FREEFF                                   ;Available ZP location
-EDDB: 85 CC     STA $CC                                     
+EDDB: 85 CC     STA ZP_CC                                    ;Zero Page Storage CC
 EDDD: 20 B2 EF  JSR L_EFB2                                  
 EDE0: F0 06     BEQ L_EDE8                                  
 ;
@@ -931,7 +931,7 @@ EDF0: F0 35     BEQ L_EE27
 ;
 L_EDF2:
 EDF2: 20 89 EF  JSR JTTarget06                              
-EDF5: 06 CC     ASL $CC                                     
+EDF5: 06 CC     ASL ZP_CC                                    ;Zero Page Storage CC
 EDF7: 90 EA     BCC L_EDE3                                  
 ;
 L_EDF9:
@@ -956,7 +956,7 @@ EE1C: F0 DB     BEQ L_EDF9
 ;
 L_EE1E:
 EE1E: A9 01     LDA #$01                                    
-EE20: 85 CC     STA $CC                                     
+EE20: 85 CC     STA ZP_CC                                    ;Zero Page Storage CC
 EE22: D0 BF     BNE L_EDE3                                  
 ;
 L_EE24:
@@ -969,7 +969,7 @@ EE2B: F0 2D     BEQ L_EE5A
 ;
 L_EE2D:
 EE2D: A9 80     LDA #$80                                    
-EE2F: 85 CC     STA $CC                                     
+EE2F: 85 CC     STA ZP_CC                                    ;Zero Page Storage CC
 ;
 L_EE31:
 EE31: 20 B2 EF  JSR L_EFB2                                  
@@ -979,12 +979,12 @@ L_EE36:
 EE36: 4C C1 ED  JMP L_EDC1                                  
 ;
 L_EE39:
-EE39: A5 CC     LDA $CC                                     
+EE39: A5 CC     LDA ZP_CC                                    ;Zero Page Storage CC
 EE3B: 20 86 EB  JSR L_EB86                                  
 ;
 L_EE3E:
 EE3E: 20 77 EF  JSR JTTarget05                              
-EE41: 46 CC     LSR $CC                                     
+EE41: 46 CC     LSR ZP_CC                                    ;Zero Page Storage CC
 EE43: 90 EC     BCC L_EE31                                  
 ;
 L_EE45:
@@ -1114,7 +1114,7 @@ EEE2: 60        RTS
 ;
 L_EEE3:
 EEE3: A5 11     LDA LINNUM                                   ;Temp: Integer Value
-EEE5: A4 12     LDY $12                                     
+EEE5: A4 12     LDY ZP_12                                    ;Zero Page Storage 12
 EEE7: C0 00     CPY #$00                                    
 EEE9: F0 08     BEQ L_EEF3                                  
 EEEB: C0 01     CPY #$01                                    
@@ -1299,7 +1299,7 @@ EFB1: 60        RTS
 L_EFB2:
 EFB2: B1 C9     LDA (EAL_LO),Y                               ;Tape End Addresses/End of Program
 EFB4: 45 FB     EOR STAL                                     ;I/O Start Address
-EFB6: 24 CC     BIT $CC                                     
+EFB6: 24 CC     BIT ZP_CC                                    ;Zero Page Storage CC
 EFB8: 60        RTS                                         
 ;
 ;================================================================================
