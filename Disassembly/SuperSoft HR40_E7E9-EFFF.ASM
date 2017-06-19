@@ -35,31 +35,33 @@ E8AC:           !TEXT "NED AND MANUFACTURED BY MG BIGNELL AND M HU" ;Hidden IO A
 E8D7:           !TEXT "MPHREY.SERIAL NUMBER OF THIS UNIT =414480" ;Hidden IO Area - Copyright
  
 ;================================================================================
-; Start of SuperSoft Code
+; Start of Main Code - Upper 2K of Editor ROM Space
 ;================================================================================
 E900: EA        NOP                                         
 E901: EA        NOP                                         
 ;--------------------------------------------------------------------------------
 ; Entry point for SYS commands 59650
 ;--------------------------------------------------------------------------------
+;
+SYSENTRY:
 E902: BA        TSX                                         
 E903: 86 B4     STX $B4                                     
 E905: 20 F5 BE  JSR TSTCOMMA                                 ;Test comma-
 E908: 84 96     STY STATUS                                   ;Kernal I/O Status Word: ST
 E90A: A2 0D     LDX #$0D                                    
 ;
-L_E90C:
+CMD_LOOP:
 E90C: DD 2A E9  CMP CMDS,X                                  
 E90F: F0 10     BEQ DO_CMD                                  
 E911: CA        DEX                                         
-E912: 10 F8     BPL L_E90C                                  
+E912: 10 F8     BPL CMD_LOOP                                
 E914: 20 D4 C8  JSR EVAL_BP                                  ;Eval Byte Parameter
 E917: 8A        TXA                                         
 ;--------------------------------------------------------------------------------
 ; If the command was not found use the value for the Control Register
 ;--------------------------------------------------------------------------------
 ;
-JTTarget10:
+SET_CONTROL:
 E918: 29 0F     AND #$0F                                    
 E91A: 8D FF EF  STA CONTROL_REG                              ;Control Register
 E91D: 8D 79 02  STA CONTROL_SAVE                             ;Control Register Save
@@ -200,8 +202,8 @@ E9BA: 20 3A EC  JSR L_EC3A
 L_E9BD:
 E9BD: 20 D4 EE  JSR L_EED4                                  
 E9C0: 20 CA EE  JSR JTTarget08                              
-E9C3: AD EE 93  LDA $93EE                                   
-E9C6: 4D F2 93  EOR $93F2                                   
+E9C3: AD EE 93  LDA STOR_EE                                  ;Storage EE
+E9C6: 4D F2 93  EOR STOR_F2                                  ;Storage F2
 E9C9: 29 01     AND #$01                                    
 E9CB: D0 34     BNE JTTarget13                              
 E9CD: A9 01     LDA #$01                                    
@@ -215,17 +217,17 @@ L_E9D6:
 E9D6: 24 FF     BIT FREEFF                                   ;Available ZP location
 E9D8: 30 D9     BMI L_E9B3                                  
 E9DA: 20 D4 EE  JSR L_EED4                                  
-E9DD: AD F1 93  LDA $93F1                                   
-E9E0: 8D F2 93  STA $93F2                                   
-E9E3: AD EC 93  LDA $93EC                                   
-E9E6: AC ED 93  LDY $93ED                                   
+E9DD: AD F1 93  LDA STOR_F1                                  ;Storage F1
+E9E0: 8D F2 93  STA STOR_F2                                  ;Storage F2
+E9E3: AD EC 93  LDA STOR_EC                                  ;Storage EC
+E9E6: AC ED 93  LDY STOR_ED                                  ;Storage ED
 E9E9: 20 C3 EE  JSR L_EEC3                                  
 E9EC: 4C BD E9  JMP L_E9BD                                  
 ;
 L_E9EF:
 E9EF: 20 CA EE  JSR JTTarget08                              
 E9F2: 20 C0 EE  JSR JTTarget07                              
-E9F5: 4D F1 93  EOR $93F1                                   
+E9F5: 4D F1 93  EOR STOR_F1                                  ;Storage F1
 E9F8: 29 01     AND #$01                                    
 E9FA: F0 02     BEQ L_E9FE                                  
 E9FC: E6 FF     INC FREEFF                                   ;Available ZP location
@@ -238,11 +240,11 @@ EA01: A5 FF     LDA FREEFF                                   ;Available ZP locat
 EA03: 29 01     AND #$01                                    
 EA05: 85 FF     STA FREEFF                                   ;Available ZP location
 EA07: 38        SEC                                         
-EA08: AD EC 93  LDA $93EC                                   
-EA0B: ED EE 93  SBC $93EE                                   
+EA08: AD EC 93  LDA STOR_EC                                  ;Storage EC
+EA0B: ED EE 93  SBC STOR_EE                                  ;Storage EE
 EA0E: 85 C0     STA PTR1                                     ;Tape Pass 1 Error Log
-EA10: AD ED 93  LDA $93ED                                   
-EA13: ED EF 93  SBC $93EF                                   
+EA10: AD ED 93  LDA STOR_ED                                  ;Storage ED
+EA13: ED EF 93  SBC STOR_EF                                  ;Storage EF
 EA16: 85 C1     STA PTR2                                     ;Tape Pass 2 Error Log
 EA18: B0 16     BCS L_EA30                                  
 EA1A: 49 FF     EOR #$FF                                    
@@ -261,8 +263,8 @@ EA2E: 85 FF     STA FREEFF                                   ;Available ZP locat
 ;
 L_EA30:
 EA30: 38        SEC                                         
-EA31: AD F1 93  LDA $93F1                                   
-EA34: ED F2 93  SBC $93F2                                   
+EA31: AD F1 93  LDA STOR_F1                                  ;Storage F1
+EA34: ED F2 93  SBC STOR_F2                                  ;Storage F2
 EA37: 85 CB     STA CMP0                                     ;Tape Timing Constants
 EA39: B0 0C     BCS L_EA47                                  
 EA3B: 49 FF     EOR #$FF                                    
@@ -423,15 +425,15 @@ EB26: 20 2D EF  JSR JTTarget12
 EB29: 4C 34 EF  JMP JTTarget03                              
 ;
 JTTarget14:
-EB2C: AD EF 93  LDA $93EF                                   
-EB2F: 85 CA     STA $CA                                     
-EB31: AD EE 93  LDA $93EE                                   
+EB2C: AD EF 93  LDA STOR_EF                                  ;Storage EF
+EB2F: 85 CA     STA EAL_HI                                   ;Tape End Addresses/End of Program
+EB31: AD EE 93  LDA STOR_EE                                  ;Storage EE
 EB34: 48        PHA                                         
-EB35: 46 CA     LSR $CA                                     
+EB35: 46 CA     LSR EAL_HI                                   ;Tape End Addresses/End of Program
 EB37: 6A        ROR                                         
 EB38: 4A        LSR                                         
 EB39: 4A        LSR                                         
-EB3A: 85 C9     STA EAL                                      ;Tape End Addresses/End of Program
+EB3A: 85 C9     STA EAL_LO                                   ;Tape End Addresses/End of Program
 EB3C: 20 2D EF  JSR JTTarget12                              
 EB3F: 48        PHA                                         
 EB40: 4A        LSR                                         
@@ -480,8 +482,8 @@ EB82: E0 03     CPX #$03
 EB84: F0 0C     BEQ L_EB92                                  
 ;
 L_EB86:
-EB86: 51 C9     EOR (EAL),Y                                  ;Tape End Addresses/End of Program
-EB88: 91 C9     STA (EAL),Y                                  ;Tape End Addresses/End of Program
+EB86: 51 C9     EOR (EAL_LO),Y                               ;Tape End Addresses/End of Program
+EB88: 91 C9     STA (EAL_LO),Y                               ;Tape End Addresses/End of Program
 ;
 L_EB8A:
 EB8A: 60        RTS                                         
@@ -489,8 +491,8 @@ EB8A: 60        RTS
 ;
 L_EB8B:
 EB8B: 49 FF     EOR #$FF                                    
-EB8D: 31 C9     AND (EAL),Y                                  ;Tape End Addresses/End of Program
-EB8F: 91 C9     STA (EAL),Y                                  ;Tape End Addresses/End of Program
+EB8D: 31 C9     AND (EAL_LO),Y                               ;Tape End Addresses/End of Program
+EB8F: 91 C9     STA (EAL_LO),Y                               ;Tape End Addresses/End of Program
 EB91: 60        RTS                                         
 ;
 ;
@@ -507,8 +509,8 @@ EB9F: 28        PLP
 EBA0: 90 E9     BCC L_EB8B                                  
 ;
 L_EBA2:
-EBA2: 11 C9     ORA (EAL),Y                                  ;Tape End Addresses/End of Program
-EBA4: 91 C9     STA (EAL),Y                                  ;Tape End Addresses/End of Program
+EBA2: 11 C9     ORA (EAL_LO),Y                               ;Tape End Addresses/End of Program
+EBA4: 91 C9     STA (EAL_LO),Y                               ;Tape End Addresses/End of Program
 EBA6: 60        RTS                                         
 ;
 ;================================================================================
@@ -526,7 +528,7 @@ EBB5: 20 CA EE  JSR JTTarget08
 JTTarget17:
 EBB8: 20 2C EB  JSR JTTarget14                              
 EBBB: 20 95 EF  JSR L_EF95                                  
-EBBE: 31 C9     AND (EAL),Y                                  ;Tape End Addresses/End of Program
+EBBE: 31 C9     AND (EAL_LO),Y                               ;Tape End Addresses/End of Program
 EBC0: D0 02     BNE L_EBC4                                  
 EBC2: E6 96     INC STATUS                                   ;Kernal I/O Status Word: ST
 ;
@@ -658,21 +660,21 @@ L_EC64:
 EC64: 4C 00 BF  JMP SYNERR                                   ;Output ?SYNTAX Error
 ;
 L_EC67:
-EC67: AC F2 93  LDY $93F2                                   
+EC67: AC F2 93  LDY STOR_F2                                  ;Storage F2
 EC6A: F0 BF     BEQ L_EC2B                                  
-EC6C: CE F2 93  DEC $93F2                                   
+EC6C: CE F2 93  DEC STOR_F2                                  ;Storage F2
 EC6F: 4C 9F EC  JMP JTTarget19                              
 ;
 JTTarget11:
 EC72: A5 BD     LDA INBIT                                    ;Cassette Temp (64#00A7)
 EC74: F0 F1     BEQ L_EC67                                  
 EC76: 18        CLC                                         
-EC77: AD F2 93  LDA $93F2                                   
+EC77: AD F2 93  LDA STOR_F2                                  ;Storage F2
 EC7A: 69 07     ADC #$07                                    
-EC7C: 8D F2 93  STA $93F2                                   
+EC7C: 8D F2 93  STA STOR_F2                                  ;Storage F2
 EC7F: 18        CLC                                         
-EC80: AD EE 93  LDA $93EE                                   
-EC83: AC EF 93  LDY $93EF                                   
+EC80: AD EE 93  LDA STOR_EE                                  ;Storage EE
+EC83: AC EF 93  LDY STOR_EF                                  ;Storage EF
 EC86: 69 08     ADC #$08                                    
 EC88: 90 01     BCC L_EC8B                                  
 EC8A: C8        INY                                         
@@ -747,7 +749,7 @@ L_ECED:
 ECED: 85 CC     STA $CC                                     
 ;
 L_ECEF:
-ECEF: B1 C9     LDA (EAL),Y                                  ;Tape End Addresses/End of Program
+ECEF: B1 C9     LDA (EAL_LO),Y                               ;Tape End Addresses/End of Program
 ECF1: 49 FF     EOR #$FF                                    
 ECF3: 24 BE     BIT BITCI                                    ;Cassette Temp (64#00A8)
 ECF5: 10 02     BPL L_ECF9                                  
@@ -783,9 +785,9 @@ ED19: 05 B3     ORA TMPB3                                    ;Temporary save eg.
 ;
 L_ED1B:
 ED1B: 49 FF     EOR #$FF                                    
-ED1D: 91 C9     STA (EAL),Y                                  ;Tape End Addresses/End of Program
+ED1D: 91 C9     STA (EAL_LO),Y                               ;Tape End Addresses/End of Program
 ED1F: C8        INY                                         
-ED20: B1 C9     LDA (EAL),Y                                  ;Tape End Addresses/End of Program
+ED20: B1 C9     LDA (EAL_LO),Y                               ;Tape End Addresses/End of Program
 ED22: 24 BE     BIT BITCI                                    ;Cassette Temp (64#00A8)
 ED24: 10 02     BPL L_ED28                                  
 ED26: 05 CC     ORA $CC                                     
@@ -797,7 +799,7 @@ ED2C: 05 FB     ORA STAL                                     ;I/O Start Address
 ;
 L_ED2E:
 ED2E: 49 FF     EOR #$FF                                    
-ED30: 91 C9     STA (EAL),Y                                  ;Tape End Addresses/End of Program
+ED30: 91 C9     STA (EAL_LO),Y                               ;Tape End Addresses/End of Program
 ED32: 88        DEY                                         
 ED33: E8        INX                                         
 ED34: E0 08     CPX #$08                                    
@@ -877,8 +879,8 @@ ED8E: F0 03     BEQ JTTarget15
 ED90: 20 BA EE  JSR L_EEBA                                  
 ;
 JTTarget15:
-ED93: AD EE 93  LDA $93EE                                   
-ED96: AC EF 93  LDY $93EF                                   
+ED93: AD EE 93  LDA STOR_EE                                  ;Storage EE
+ED96: AC EF 93  LDY STOR_EF                                  ;Storage EF
 ED99: 85 CE     STA BITTS                                    ;Cassette Temp (64#00B4): Tape read timer flag=IRQ enabled for Timer 1
 ED9B: 84 CF     STY EOTRD                                    ;End of tape read
 ED9D: 20 2C EB  JSR JTTarget14                              
@@ -900,9 +902,9 @@ EDBF: D0 E9     BNE L_EDAA
 ;
 L_EDC1:
 EDC1: A5 CE     LDA BITTS                                    ;Cassette Temp (64#00B4): Tape read timer flag=IRQ enabled for Timer 1
-EDC3: 8D EE 93  STA $93EE                                   
+EDC3: 8D EE 93  STA STOR_EE                                  ;Storage EE
 EDC6: A5 CF     LDA EOTRD                                    ;End of tape read
-EDC8: 8D EF 93  STA $93EF                                   
+EDC8: 8D EF 93  STA STOR_EF                                  ;Storage EF
 EDCB: 20 2D EF  JSR JTTarget12                              
 EDCE: F0 12     BEQ L_EDE2                                  
 EDD0: 20 A7 EF  JSR L_EFA7                                  
@@ -922,9 +924,9 @@ EDE3: 20 B2 EF  JSR L_EFB2
 EDE6: D0 56     BNE L_EE3E                                  
 ;
 L_EDE8:
-EDE8: AD EF 93  LDA $93EF                                   
+EDE8: AD EF 93  LDA STOR_EF                                  ;Storage EF
 EDEB: D0 05     BNE L_EDF2                                  
-EDED: AD EE 93  LDA $93EE                                   
+EDED: AD EE 93  LDA STOR_EE                                  ;Storage EE
 EDF0: F0 35     BEQ L_EE27                                  
 ;
 L_EDF2:
@@ -934,22 +936,22 @@ EDF7: 90 EA     BCC L_EDE3
 ;
 L_EDF9:
 EDF9: 20 80 EF  JSR JTTarget01                              
-EDFC: B1 C9     LDA (EAL),Y                                  ;Tape End Addresses/End of Program
+EDFC: B1 C9     LDA (EAL_LO),Y                               ;Tape End Addresses/End of Program
 EDFE: C5 FB     CMP STAL                                     ;I/O Start Address
 EE00: D0 1C     BNE L_EE1E                                  
-EE02: AD EF 93  LDA $93EF                                   
+EE02: AD EF 93  LDA STOR_EF                                  ;Storage EF
 EE05: D0 07     BNE L_EE0E                                  
-EE07: AD EE 93  LDA $93EE                                   
+EE07: AD EE 93  LDA STOR_EE                                  ;Storage EE
 EE0A: C9 07     CMP #$07                                    
 EE0C: F0 16     BEQ L_EE24                                  
 ;
 L_EE0E:
 EE0E: 38        SEC                                         
-EE0F: AD EE 93  LDA $93EE                                   
+EE0F: AD EE 93  LDA STOR_EE                                  ;Storage EE
 EE12: E9 08     SBC #$08                                    
-EE14: 8D EE 93  STA $93EE                                   
+EE14: 8D EE 93  STA STOR_EE                                  ;Storage EE
 EE17: B0 E0     BCS L_EDF9                                  
-EE19: CE EF 93  DEC $93EF                                   
+EE19: CE EF 93  DEC STOR_EF                                  ;Storage EF
 EE1C: F0 DB     BEQ L_EDF9                                  
 ;
 L_EE1E:
@@ -958,10 +960,10 @@ EE20: 85 CC     STA $CC
 EE22: D0 BF     BNE L_EDE3                                  
 ;
 L_EE24:
-EE24: 8C EE 93  STY $93EE                                   
+EE24: 8C EE 93  STY STOR_EE                                  ;Storage EE
 ;
 L_EE27:
-EE27: B1 C9     LDA (EAL),Y                                  ;Tape End Addresses/End of Program
+EE27: B1 C9     LDA (EAL_LO),Y                               ;Tape End Addresses/End of Program
 EE29: C5 FB     CMP STAL                                     ;I/O Start Address
 EE2B: F0 2D     BEQ L_EE5A                                  
 ;
@@ -987,27 +989,27 @@ EE43: 90 EC     BCC L_EE31
 ;
 L_EE45:
 EE45: 20 70 EF  JSR JTTarget02                              
-EE48: AD EF 93  LDA $93EF                                   
+EE48: AD EF 93  LDA STOR_EF                                  ;Storage EF
 EE4B: F0 07     BEQ L_EE54                                  
-EE4D: AD EE 93  LDA $93EE                                   
+EE4D: AD EE 93  LDA STOR_EE                                  ;Storage EE
 EE50: C9 40     CMP #$40                                    
 EE52: B0 E2     BCS L_EE36                                  
 ;
 L_EE54:
-EE54: B1 C9     LDA (EAL),Y                                  ;Tape End Addresses/End of Program
+EE54: B1 C9     LDA (EAL_LO),Y                               ;Tape End Addresses/End of Program
 EE56: C5 FB     CMP STAL                                     ;I/O Start Address
 EE58: D0 D3     BNE L_EE2D                                  
 ;
 L_EE5A:
 EE5A: A9 FF     LDA #$FF                                    
 EE5C: 45 FB     EOR STAL                                     ;I/O Start Address
-EE5E: 91 C9     STA (EAL),Y                                  ;Tape End Addresses/End of Program
+EE5E: 91 C9     STA (EAL_LO),Y                               ;Tape End Addresses/End of Program
 EE60: 18        CLC                                         
-EE61: AD EE 93  LDA $93EE                                   
+EE61: AD EE 93  LDA STOR_EE                                  ;Storage EE
 EE64: 69 08     ADC #$08                                    
-EE66: 8D EE 93  STA $93EE                                   
+EE66: 8D EE 93  STA STOR_EE                                  ;Storage EE
 EE69: 90 DA     BCC L_EE45                                  
-EE6B: EE EF 93  INC $93EF                                   
+EE6B: EE EF 93  INC STOR_EF                                  ;Storage EF
 EE6E: D0 D5     BNE L_EE45                                  
 ;================================================================================
 ; "C" COMMAND. Clear
@@ -1028,10 +1030,10 @@ EE77: 20 70 00  JSR CHRGET                                   ;Subroutine: Get Ne
 EE7A: 20 F8 EE  JSR L_EEF8                                  
 ;
 JTTarget16:
-EE7D: A9 00     LDA #$00                                    
+EE7D: A9 00     LDA #$00                                    ; $9000 - Start of Bitmap Data
 EE7F: A0 90     LDY #$90                                    
-EE81: 85 C9     STA EAL                                      ;Tape End Addresses/End of Program
-EE83: 84 CA     STY $CA                                     
+EE81: 85 C9     STA EAL_LO                                   ;Tape End Addresses/End of Program
+EE83: 84 CA     STY EAL_HI                                   ;Tape End Addresses/End of Program
 EE85: A9 19     LDA #$19                                    
 EE87: 85 FD     STA MEMUSS                                   ;Tape Load Temps
 ;
@@ -1045,19 +1047,19 @@ L_EE8D:
 EE8D: A9 FF     LDA #$FF                                    
 EE8F: 24 FF     BIT FREEFF                                   ;Available ZP location
 EE91: 50 02     BVC L_EE95                                  
-EE93: 51 C9     EOR (EAL),Y                                  ;Tape End Addresses/End of Program
+EE93: 51 C9     EOR (EAL_LO),Y                               ;Tape End Addresses/End of Program
 ;
 L_EE95:
-EE95: 91 C9     STA (EAL),Y                                  ;Tape End Addresses/End of Program
+EE95: 91 C9     STA (EAL_LO),Y                               ;Tape End Addresses/End of Program
 EE97: C8        INY                                         
-EE98: C0 28     CPY #$28                                    
+EE98: C0 28     CPY #$28                                    ; 40 columns?
 EE9A: D0 F1     BNE L_EE8D                                  
 EE9C: 20 3D EF  JSR L_EF3D                                  
 EE9F: CA        DEX                                         
 EEA0: D0 E9     BNE L_EE8B                                  
 EEA2: 20 45 EF  JSR L_EF45                                  
 EEA5: E9 04     SBC #$04                                    
-EEA7: 85 CA     STA $CA                                     
+EEA7: 85 CA     STA EAL_HI                                   ;Tape End Addresses/End of Program
 EEA9: C6 FD     DEC MEMUSS                                   ;Tape Load Temps
 EEAB: D0 DC     BNE L_EE89                                  
 EEAD: 60        RTS                                         
@@ -1078,18 +1080,18 @@ L_EEBD:
 EEBD: 20 D4 EE  JSR L_EED4                                  
 ;
 JTTarget07:
-EEC0: 8E F2 93  STX $93F2                                   
+EEC0: 8E F2 93  STX STOR_F2                                  ;Storage F2
 ;
 L_EEC3:
-EEC3: 8D EE 93  STA $93EE                                   
-EEC6: 8C EF 93  STY $93EF                                   
+EEC3: 8D EE 93  STA STOR_EE                                  ;Storage EE
+EEC6: 8C EF 93  STY STOR_EF                                  ;Storage EF
 EEC9: 60        RTS                                         
 ;
 ;
 JTTarget08:
-EECA: 8E F1 93  STX $93F1                                   
-EECD: 8D EC 93  STA $93EC                                   
-EED0: 8C ED 93  STY $93ED                                   
+EECA: 8E F1 93  STX STOR_F1                                  ;Storage F1
+EECD: 8D EC 93  STA STOR_EC                                  ;Storage EC
+EED0: 8C ED 93  STY STOR_ED                                  ;Storage ED
 EED3: 60        RTS                                         
 ;
 ;
@@ -1132,39 +1134,39 @@ EEF6: 85 BB     STA BUFPNT                                   ;Pointer: Tape I/O 
 ;
 L_EEF8:
 EEF8: A2 FE     LDX #$FE                                    
-EEFA: AD F3 93  LDA $93F3                                   
+EEFA: AD F3 93  LDA STOR_F3                                  ;Storage F3
 EEFD: 49 FF     EOR #$FF                                    
-EEFF: 8D F3 93  STA $93F3                                   
-EF02: CD F3 93  CMP $93F3                                   
+EEFF: 8D F3 93  STA STOR_F3                                  ;Storage F3
+EF02: CD F3 93  CMP STOR_F3                                  ;Storage F3
 EF05: D0 D3     BNE L_EEDA                                  
 EF07: 60        RTS                                         
 ;
 ;
 L_EF08:
 EF08: 18        CLC                                         
-EF09: 65 C9     ADC EAL                                      ;Tape End Addresses/End of Program
-EF0B: 85 C9     STA EAL                                      ;Tape End Addresses/End of Program
+EF09: 65 C9     ADC EAL_LO                                   ;Tape End Addresses/End of Program
+EF0B: 85 C9     STA EAL_LO                                   ;Tape End Addresses/End of Program
 EF0D: 8A        TXA                                         
 ;
 L_EF0E:
-EF0E: 65 CA     ADC $CA                                     
-EF10: 85 CA     STA $CA                                     
+EF0E: 65 CA     ADC EAL_HI                                   ;Tape End Addresses/End of Program
+EF10: 85 CA     STA EAL_HI                                   ;Tape End Addresses/End of Program
 EF12: 60        RTS                                         
 ;
 ;
 L_EF13:
-EF13: AD F2 93  LDA $93F2                                   
-EF16: CD F1 93  CMP $93F1                                   
+EF13: AD F2 93  LDA STOR_F2                                  ;Storage F2
+EF16: CD F1 93  CMP STOR_F1                                  ;Storage F1
 EF19: F0 C4     BEQ L_EEDF                                  
 EF1B: 60        RTS                                         
 ;
 ;
 L_EF1C:
-EF1C: AD EF 93  LDA $93EF                                   
-EF1F: CD ED 93  CMP $93ED                                   
+EF1C: AD EF 93  LDA STOR_EF                                  ;Storage EF
+EF1F: CD ED 93  CMP STOR_ED                                  ;Storage ED
 EF22: D0 08     BNE L_EF2C                                  
-EF24: AD EE 93  LDA $93EE                                   
-EF27: CD EC 93  CMP $93EC                                   
+EF24: AD EE 93  LDA STOR_EE                                  ;Storage EE
+EF27: CD EC 93  CMP STOR_EC                                  ;Storage EC
 EF2A: F0 B3     BEQ L_EEDF                                  
 ;
 L_EF2C:
@@ -1174,92 +1176,92 @@ EF2C: 60        RTS
 JTTarget12:
 EF2D: 38        SEC                                         
 EF2E: A9 C7     LDA #$C7                                    
-EF30: ED F2 93  SBC $93F2                                   
+EF30: ED F2 93  SBC STOR_F2                                  ;Storage F2
 EF33: 60        RTS                                         
 ;
 ;
 JTTarget03:
-EF34: CE F2 93  DEC $93F2                                   
+EF34: CE F2 93  DEC STOR_F2                                  ;Storage F2
 EF37: 29 07     AND #$07                                    
 EF39: C9 07     CMP #$07                                    
 EF3B: F0 08     BEQ L_EF45                                  
 ;
 L_EF3D:
 EF3D: 18        CLC                                         
-EF3E: A5 CA     LDA $CA                                     
+EF3E: A5 CA     LDA EAL_HI                                   ;Tape End Addresses/End of Program
 EF40: 69 04     ADC #$04                                    
-EF42: 85 CA     STA $CA                                     
+EF42: 85 CA     STA EAL_HI                                   ;Tape End Addresses/End of Program
 EF44: 60        RTS                                         
 ;
 ;
 L_EF45:
 EF45: 38        SEC                                         
-EF46: A5 C9     LDA EAL                                      ;Tape End Addresses/End of Program
+EF46: A5 C9     LDA EAL_LO                                   ;Tape End Addresses/End of Program
 EF48: E9 D8     SBC #$D8                                    
-EF4A: 85 C9     STA EAL                                      ;Tape End Addresses/End of Program
-EF4C: A5 CA     LDA $CA                                     
+EF4A: 85 C9     STA EAL_LO                                   ;Tape End Addresses/End of Program
+EF4C: A5 CA     LDA EAL_HI                                   ;Tape End Addresses/End of Program
 EF4E: E9 1B     SBC #$1B                                    
-EF50: 85 CA     STA $CA                                     
+EF50: 85 CA     STA EAL_HI                                   ;Tape End Addresses/End of Program
 EF52: 60        RTS                                         
 ;
 ;
 JTTarget04:
-EF53: EE F2 93  INC $93F2                                   
+EF53: EE F2 93  INC STOR_F2                                  ;Storage F2
 EF56: 29 07     AND #$07                                    
 EF58: F0 08     BEQ L_EF62                                  
 EF5A: 38        SEC                                         
-EF5B: A5 CA     LDA $CA                                     
+EF5B: A5 CA     LDA EAL_HI                                   ;Tape End Addresses/End of Program
 EF5D: E9 04     SBC #$04                                    
-EF5F: 85 CA     STA $CA                                     
+EF5F: 85 CA     STA EAL_HI                                   ;Tape End Addresses/End of Program
 EF61: 60        RTS                                         
 ;
 ;
 L_EF62:
 EF62: 18        CLC                                         
-EF63: A5 C9     LDA EAL                                      ;Tape End Addresses/End of Program
+EF63: A5 C9     LDA EAL_LO                                   ;Tape End Addresses/End of Program
 EF65: 69 D8     ADC #$D8                                    
-EF67: 85 C9     STA EAL                                      ;Tape End Addresses/End of Program
-EF69: A5 CA     LDA $CA                                     
+EF67: 85 C9     STA EAL_LO                                   ;Tape End Addresses/End of Program
+EF69: A5 CA     LDA EAL_HI                                   ;Tape End Addresses/End of Program
 EF6B: 69 1B     ADC #$1B                                    
-EF6D: 85 CA     STA $CA                                     
+EF6D: 85 CA     STA EAL_HI                                   ;Tape End Addresses/End of Program
 EF6F: 60        RTS                                         
 ;
 ;
 JTTarget02:
-EF70: E6 C9     INC EAL                                      ;Tape End Addresses/End of Program
+EF70: E6 C9     INC EAL_LO                                   ;Tape End Addresses/End of Program
 EF72: D0 02     BNE L_EF76                                  
-EF74: E6 CA     INC $CA                                     
+EF74: E6 CA     INC EAL_HI                                   ;Tape End Addresses/End of Program
 ;
 L_EF76:
 EF76: 60        RTS                                         
 ;
 ;
 JTTarget05:
-EF77: EE EE 93  INC $93EE                                   
+EF77: EE EE 93  INC STOR_EE                                  ;Storage EE
 EF7A: D0 03     BNE L_EF7F                                  
-EF7C: EE EF 93  INC $93EF                                   
+EF7C: EE EF 93  INC STOR_EF                                  ;Storage EF
 ;
 L_EF7F:
 EF7F: 60        RTS                                         
 ;
 ;
 JTTarget01:
-EF80: A5 C9     LDA EAL                                      ;Tape End Addresses/End of Program
+EF80: A5 C9     LDA EAL_LO                                   ;Tape End Addresses/End of Program
 EF82: D0 02     BNE L_EF86                                  
-EF84: C6 CA     DEC $CA                                     
+EF84: C6 CA     DEC EAL_HI                                   ;Tape End Addresses/End of Program
 ;
 L_EF86:
-EF86: C6 C9     DEC EAL                                      ;Tape End Addresses/End of Program
+EF86: C6 C9     DEC EAL_LO                                   ;Tape End Addresses/End of Program
 EF88: 60        RTS                                         
 ;
 ;
 JTTarget06:
-EF89: AD EE 93  LDA $93EE                                   
+EF89: AD EE 93  LDA STOR_EE                                  ;Storage EE
 EF8C: D0 03     BNE L_EF91                                  
-EF8E: CE EF 93  DEC $93EF                                   
+EF8E: CE EF 93  DEC STOR_EF                                  ;Storage EF
 ;
 L_EF91:
-EF91: CE EE 93  DEC $93EE                                   
+EF91: CE EE 93  DEC STOR_EE                                  ;Storage EE
 EF94: 60        RTS                                         
 ;
 ;
@@ -1277,9 +1279,9 @@ EF9D: 60        RTS
 ;
 ;
 L_EF9E:
-EF9E: A5 C9     LDA EAL                                      ;Tape End Addresses/End of Program
+EF9E: A5 C9     LDA EAL_LO                                   ;Tape End Addresses/End of Program
 EFA0: 85 C0     STA PTR1                                     ;Tape Pass 1 Error Log
-EFA2: A5 CA     LDA $CA                                     
+EFA2: A5 CA     LDA EAL_HI                                   ;Tape End Addresses/End of Program
 EFA4: 85 C1     STA PTR2                                     ;Tape Pass 2 Error Log
 EFA6: 60        RTS                                         
 ;
@@ -1287,26 +1289,29 @@ EFA6: 60        RTS
 L_EFA7:
 EFA7: 48        PHA                                         
 EFA8: A5 C0     LDA PTR1                                     ;Tape Pass 1 Error Log
-EFAA: 85 C9     STA EAL                                      ;Tape End Addresses/End of Program
+EFAA: 85 C9     STA EAL_LO                                   ;Tape End Addresses/End of Program
 EFAC: A5 C1     LDA PTR2                                     ;Tape Pass 2 Error Log
-EFAE: 85 CA     STA $CA                                     
+EFAE: 85 CA     STA EAL_HI                                   ;Tape End Addresses/End of Program
 EFB0: 68        PLA                                         
 EFB1: 60        RTS                                         
 ;
 ;
 L_EFB2:
-EFB2: B1 C9     LDA (EAL),Y                                  ;Tape End Addresses/End of Program
+EFB2: B1 C9     LDA (EAL_LO),Y                               ;Tape End Addresses/End of Program
 EFB4: 45 FB     EOR STAL                                     ;I/O Start Address
 EFB6: 24 CC     BIT $CC                                     
 EFB8: 60        RTS                                         
 ;
 ;================================================================================
-; These appear to be offsets into the BITMAP space
+; HI BYTE of start of each character scanline
 ;================================================================================
 ;
 TABLE1:
-EFB9:           !BYTE $90,$94,$98,$9C,$A0,$A4,$A8,$AC       ;unknown
+EFB9:           !BYTE $90,$94,$98,$9C,$A0,$A4,$A8,$AC       ;Bitmap HI byte for each character scanline
  
+;================================================================================
+; FILLER
+;================================================================================
 ;
 L_EFC1:
 EFC1:           !BYTE $EA,$EA,$EA,$EA,$EA,$EA               ;filler
@@ -1323,7 +1328,7 @@ EFD6: 4C 89 EF  JMP JTTarget06
 EFD9: 4C C0 EE  JMP JTTarget07                              
 EFDC: 4C CA EE  JMP JTTarget08                              
 EFDF: 4C F4 EE  JMP JTTarget09                              
-EFE2: 4C 18 E9  JMP JTTarget10                              
+EFE2: 4C 18 E9  JMP SET_CONTROL                             
 EFE5: 4C 72 EC  JMP JTTarget11                              
 EFE8: 4C 2D EF  JMP JTTarget12                              
 EFEB: 4C 01 EA  JMP JTTarget13                              

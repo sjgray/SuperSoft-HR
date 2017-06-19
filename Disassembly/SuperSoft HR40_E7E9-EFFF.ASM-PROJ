@@ -65,7 +65,8 @@ EFFD,e19
 00C0,PTR1  ,Tape Pass 1 Error Log
 00C1,PTR2  ,Tape Pass 2 Error Log
 00C4,PNT   ,Pointer: Current Screen Line Address
-00C9,EAL   ,Tape End Addresses/End of Program
+00C9,EAL_LO,Tape End Addresses/End of Program
+00CA,EAL_HI,Tape End Addresses/End of Program
 00CB,CMP0  ,Tape Timing Constants
 00CE,BITTS ,Cassette Temp (64#00B4): Tape read timer flag=IRQ enabled for Timer 1
 00CF,EOTRD ,End of tape read
@@ -85,6 +86,13 @@ EFFD,e19
 00FD,MEMUSS,Tape Load Temps
 00FF,FREEFF,Available ZP location
 0279,CONTROL_SAVE,Control Register Save
+93EC,STOR_EC,Storage EC
+93ED,STOR_ED,Storage ED
+93EE,STOR_EE,Storage EE
+93EF,STOR_EF,Storage EF
+93F1,STOR_F1,Storage F1
+93F2,STOR_F2,Storage F2
+93F3,STOR_F3,Storage F3
 A7F8,CHR_PTR_LO,Character Pointer LO
 A7F9,CHR_PTR_HI,Character Pointer HI
 B883,DO_BRAK,Perform []
@@ -110,10 +118,12 @@ E98D,E98D,H,bit command
 EBC7,EBC7,H,bit command
 EBCA,EBCA,H,bit command
 EE72,EE72,H,bit command
-EFB9,EFC0,H,unknown
+EFB9,EFC0,H,Bitmap HI byte for each character scanline
 EFC1,EFC6,H,filler
 [LABELS]
-E918,JTTarget10
+E902,SYSENTRY
+E90C,CMD_LOOP
+E918,SET_CONTROL
 E921,DO_CMD
 E92A,CMDS,Commands
 E938,CMDVEC_HI,Command Vector HI
@@ -164,7 +174,7 @@ EFB9,TABLE1,Unknown Table #1
 [COMMENTS]
 E7E9,=,This is located in an unused area at the end of the Editor ROM
 E800,=,This area is normally hidden under the IO area from $E800-E8FF
-E900,=,Start of SuperSoft Code
+E900,=,Start of Main Code - Upper 2K of Editor ROM Space
 E902,-.Entry point for SYS commands 59650
 E918,-,If the command was not found use the value for the Control Register
 E921,-,Push the target address on the stack and jump to it using RTS
@@ -191,5 +201,8 @@ ECD3,i,Jump to patch area in Editor ROM area
 ED74,=,"M" COMMAND. Map Erase, Map Fill.
 EE70,=,"C" COMMAND. Clear
 EE72,=,"I" COMMAND. Invert
-EFB9,=,These appear to be offsets into the BITMAP space
+EE7D,i,$9000 - Start of Bitmap Data
+EE98,i,40 columns?
+EFB9,=,HI BYTE of start of each character scanline
+EFC1,=,FILLER
 EFC7,=,JUMP TABLE
