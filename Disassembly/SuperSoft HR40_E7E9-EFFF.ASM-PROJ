@@ -59,8 +59,9 @@ EFFD,e19
 00A9,GDBLN ,Character Under Cursor
 00B1,ZP_B1,Zero Page Storage B1
 00B2,ZP_B2,Zero Page Storage B2
-00B3,ZP_B3 ,Zero Page Storage B3
-00B7,ZP_B7 ,Zero Page Storage B7
+00B3,ZP_B3,Zero Page Storage B3
+00B4,ZP_B4,Zero Page Storage B4
+00B7,ZP_B7,Zero Page Storage B7
 00B8,ZP_B8,Zero Page Storage B8
 00BB,ZP_BB,Zero Page Storage BB
 00BC,ZP_BC,Zero Page Storage BC
@@ -74,8 +75,8 @@ EFFD,e19
 00CA,EAL_HI,Tape End Addresses/End of Program
 00CB,ZP_CB,Zero Page Storage CB
 00CC,ZP_CC,Zero Page Storage CC
-00CE,BITTS ,Cassette Temp (64#00B4): Tape read timer flag=IRQ enabled for Timer 1
-00CF,EOTRD ,End of tape read
+00CE,ZP_CE,Zero Page Storage CE
+00CF,ZP_CF,Zero Page Storage CF
 00D3,SA    ,Current Secondary Address
 00D5,LNMX  ,Physical Screen Line Length
 00D9,DATAX ,Current Character to Print
@@ -90,6 +91,7 @@ EFFD,e19
 00FA,CAS2  ,Tape Motor Interlock #2
 00FB,ZP_FB,Zero Page Storage FB
 00FD,MEMUSS,Tape Load Temps
+00FE,ZP_FE,Zero Page Storage FE (note use of ABSOLUTE addressing mode!)
 00FF,ZP_FF,Zero Page Storage FF
 0279,CONTROL_SAVE,Control Register Save
 87F7,SCREEN_87F7,This is in unused 80 column video ram????
@@ -195,6 +197,7 @@ E988,=,"R" COMMAND. Reset Line.
 E98B,=,"F" COMMAND. +"L"=Flip Line. +"P"=Flip Point
 E98E,=,"D" COMMAND. Dot Line.
 E99A,i,Check second character. Is it "L"? L=Line.
+EB44,i,$E798 is the TEXT SCREEN Line Address Table LO
 EBA7,=,"E" COMMAND. Examine.
 EBC5,=,$8B COMMAND (RVS K). Unknown.
 EBC8,=,"T" COMMAND. Text. +"NH"=Normal Horizontal

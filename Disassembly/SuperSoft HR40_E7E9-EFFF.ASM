@@ -45,7 +45,7 @@ E901: EA        NOP
 ;
 SYSENTRY:
 E902: BA        TSX                                         
-E903: 86 B4     STX $B4                                     
+E903: 86 B4     STX ZP_B4                                    ;Zero Page Storage B4
 E905: 20 F5 BE  JSR TSTCOMMA                                 ;Test comma-
 E908: 84 96     STY STATUS                                   ;Kernal I/O Status Word: ST
 E90A: A2 0D     LDX #$0D                                    
@@ -440,7 +440,7 @@ EB40: 4A        LSR
 EB41: 4A        LSR                                         
 EB42: 4A        LSR                                         
 EB43: A8        TAY                                         
-EB44: B9 98 E7  LDA $E798,Y                                 
+EB44: B9 98 E7  LDA $E798,Y                                 ; $E798 is the TEXT SCREEN Line Address Table LO
 EB47: 48        PHA                                         
 EB48: A2 03     LDX #$03                                    
 EB4A: C0 14     CPY #$14                                    
@@ -717,10 +717,10 @@ ECC2: 10 0F     BPL L_ECD3
 ECC4: C6 CB     DEC ZP_CB                                    ;Zero Page Storage CB
 ECC6: BA        TSX                                         
 ECC7: 98        TYA                                         
-ECC8: 9D FE 00  STA $00FE,X                                 
+ECC8: 9D FE 00  STA ZP_FE,X                                  ;Zero Page Storage FE (note use of ABSOLUTE addressing mode!)
 ;
 L_ECCB:
-ECCB: BD FE 00  LDA $00FE,X                                 
+ECCB: BD FE 00  LDA ZP_FE,X                                  ;Zero Page Storage FE (note use of ABSOLUTE addressing mode!)
 ECCE: F0 FB     BEQ L_ECCB                                  
 ECD0: 8C FF EF  STY CONTROL_REG                              ;Control Register
 ;
@@ -881,8 +881,8 @@ ED90: 20 BA EE  JSR L_EEBA
 JTTarget15:
 ED93: AD EE 93  LDA STOR_EE                                  ;Storage EE
 ED96: AC EF 93  LDY STOR_EF                                  ;Storage EF
-ED99: 85 CE     STA BITTS                                    ;Cassette Temp (64#00B4): Tape read timer flag=IRQ enabled for Timer 1
-ED9B: 84 CF     STY EOTRD                                    ;End of tape read
+ED99: 85 CE     STA ZP_CE                                    ;Zero Page Storage CE
+ED9B: 84 CF     STY ZP_CF                                    ;Zero Page Storage CF
 ED9D: 20 2C EB  JSR JTTarget14                              
 EDA0: 20 9E EF  JSR L_EF9E                                  
 EDA3: 20 95 EF  JSR L_EF95                                  
@@ -901,9 +901,9 @@ EDBC: 20 9E EF  JSR L_EF9E
 EDBF: D0 E9     BNE L_EDAA                                  
 ;
 L_EDC1:
-EDC1: A5 CE     LDA BITTS                                    ;Cassette Temp (64#00B4): Tape read timer flag=IRQ enabled for Timer 1
+EDC1: A5 CE     LDA ZP_CE                                    ;Zero Page Storage CE
 EDC3: 8D EE 93  STA STOR_EE                                  ;Storage EE
-EDC6: A5 CF     LDA EOTRD                                    ;End of tape read
+EDC6: A5 CF     LDA ZP_CF                                    ;Zero Page Storage CF
 EDC8: 8D EF 93  STA STOR_EF                                  ;Storage EF
 EDCB: 20 2D EF  JSR JTTarget12                              
 EDCE: F0 12     BEQ L_EDE2                                  
@@ -1107,7 +1107,7 @@ EEDA: 86 96     STX STATUS                                   ;Kernal I/O Status 
 EEDC: 20 83 B8  JSR DO_BRAK                                  ;Perform []
 ;
 L_EEDF:
-EEDF: A6 B4     LDX $B4                                     
+EEDF: A6 B4     LDX ZP_B4                                    ;Zero Page Storage B4
 EEE1: 9A        TXS                                         
 EEE2: 60        RTS                                         
 ;
