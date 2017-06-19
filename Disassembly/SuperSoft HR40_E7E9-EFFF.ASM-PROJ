@@ -41,6 +41,7 @@ EFFD,e19
 0016,TEMPST,Stack for Temporary Strings
 002E,STREND,Pointer End of BASIC Arrays (+1)
 0032,FRESPC,Utility String Pointer
+0033,ZP_33,Zero Page Storage 33
 0034,MEMSIZ,Pointer: Highest Address Used by BASIC
 003C,DATLIN,Current DATA Line Number
 0061,ZP_61,Zero Page Storage 61
@@ -56,18 +57,18 @@ EFFD,e19
 009E,NDX   ,No. of Chars. in Keyboard Buffer (Queue)
 00A2,AVAIL ,Not Used
 00A9,GDBLN ,Character Under Cursor
-00B1,PRTY  ,Tape Character Parity
-00B2,DPSW  ,Flag: Tape Byte-Received
-00B3,TMPB3 ,Temporary save eg. logical address or DOS wedge
+00B1,ZP_B1,Zero Page Storage B1
+00B2,ZP_B2,Zero Page Storage B2
+00B3,ZP_B3 ,Zero Page Storage B3
 00B7,ZP_B7 ,Zero Page Storage B7
 00B8,ZP_B8,Zero Page Storage B8
-00BB,BUFPNT,Pointer: Tape I/O Buffer #1
-00BC,BUFP2 ,Pointer: Tape I/O Buffer #2
-00BD,INBIT ,Cassette Temp (64#00A7)
-00BE,BITCI ,Cassette Temp (64#00A8)
+00BB,ZP_BB,Zero Page Storage BB
+00BC,ZP_BC,Zero Page Storage BC
+00BD,ZP_BD,Zero Page Storage BD
+00BE,ZP_BE,Zero Page Storage BE
 00BF,RINONE,RS-232 Flag: Check for Start Bit (64#00A9)
-00C0,PTR1  ,Tape Pass 1 Error Log
-00C1,PTR2  ,Tape Pass 2 Error Log
+00C0,ZP_C0,Zero Page Storage C0
+00C1,ZP_C1,Zero Page Storage C1
 00C4,PNT   ,Pointer: Current Screen Line Address
 00C9,EAL_LO,Tape End Addresses/End of Program
 00CA,EAL_HI,Tape End Addresses/End of Program
@@ -87,9 +88,9 @@ EFFD,e19
 00E9,SCNVEC,Input from screen vector (from E006)
 00F9,CAS1  ,Tape Motor Interlock #1
 00FA,CAS2  ,Tape Motor Interlock #2
-00FB,STAL  ,I/O Start Address
+00FB,ZP_FB,Zero Page Storage FB
 00FD,MEMUSS,Tape Load Temps
-00FF,FREEFF,Available ZP location
+00FF,ZP_FF,Zero Page Storage FF
 0279,CONTROL_SAVE,Control Register Save
 87F7,SCREEN_87F7,This is in unused 80 column video ram????
 93EC,STOR_EC,Storage EC
