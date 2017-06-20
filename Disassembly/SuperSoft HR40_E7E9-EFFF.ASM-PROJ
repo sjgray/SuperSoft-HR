@@ -1,5 +1,7 @@
 [PROJECT]
-E7E9
+LA=E7E9
+DIVLEN=99
+INLCOL=60
 [ENTRYPT]
 E900,Main Entry Point (actually E902)
 EFC7,e1
