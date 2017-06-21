@@ -1,7 +1,7 @@
 SuperSoft High Resolution Graphics Boards (C)1982 HR40B, HR80, HR82
 ===================================================================
 
-Compiled by Steve Gray, Feb 13/2014  Updated: Jun 6/2017
+Compiled by Steve Gray, Feb 13/2014  Updated: Jun 21/2017
 
 BOARD DIFFERENCES
 -----------------
@@ -85,7 +85,9 @@ FLYOUTS
 
 DIL........: UB13-Pin 4 to 13 (CRTC TA0-TA9 Video memory address)
 - HR40B: Br,Red,Or,Yel,Grn,Blu,Pur,Gray,Wh,Blk
-- HR80 : 
+- HR80 :
+
+ 
 MEMORY MAP
 ----------
 
@@ -99,6 +101,50 @@ Control Register: $EFFF (61439)
 - Bit 1:
 - Bit 2:
 - Bit 3:
+
+
+BITMAP MEMORY LAYOUT
+--------------------
+
+Of the 8K (8192 bytes) on board RAM, 8000 bytes are used for the display.
+40 characters x 25 lines x 8 bytes per character = 8000.
+Think of the bitmap memory as 1024 bytes wide by 8 pixels tall.
+Now imagine chopping it into 40 bytes wide chunks and stacking them one
+on top the other. You will have one chunk left over that is 24 bytes wide.
+
+PR=Pixel Row#, CR=Character Row#, SL=Character Scan line#, ADDR=Hex Address
+Each "-" represents 8 pixels (1 character wide)
+
+PR   CR  SL  ADDR                                          ADDR
+001  01  01  9000 ---------------------------------------- 9027 First character Row
+002  01  02  9400 ---------------------------------------- 9427
+003  01  03  9800 ---------------------------------------- 9827
+004  01  04  9C00 ---------------------------------------- 9C27
+005  01  05  A000 ---------------------------------------- A027
+006  01  06  A400 ---------------------------------------- A427
+007  01  07  A800 ---------------------------------------- A827
+008  01  08  AC00 ---------------------------------------- AC27
+
+009  02  01  9028 ---------------------------------------- 904F Second character Row
+010  02  02  9428 ---------------------------------------- 944F
+011  02  03  9828 ---------------------------------------- 984F
+012  02  04  9C28 ---------------------------------------- 9C4F
+013  02  05  A028 ---------------------------------------- A04F
+014  02  06  A428 ---------------------------------------- A44F
+015  02  07  A828 ---------------------------------------- A84F
+016  02  08  AC28 ---------------------------------------- AC47
+
+017  03  01  9050 ---------------------------------------- 9077 Third character Row
+.
+.
+193  25  01  93C0 ---------------------------------------- 93E7   93E8 to 93FF Unused  25th Character ROW
+194  25  02  97C0 ---------------------------------------- 93E7   97E8 to 97FF Unused
+195  25  03  9BC0 ---------------------------------------- 93E7   9BE8 to 9BFF Unused
+196  25  04  9EC0 ---------------------------------------- 93E7   9EE8 to 9EFF Unused
+197  25  05  A3C0 ---------------------------------------- 93E7   A3E8 to A3FF Unused
+198  25  06  A7C0 ---------------------------------------- 93E7   A7E8 to A7FF Unused
+199  25  07  ABC0 ---------------------------------------- 93E7   ABE8 to ABFF Unused
+200  25  08  AEC0 ---------------------------------------- 93E7   AEE8 to AEFF Unused
 
 
 SuperSoft HR Commands
