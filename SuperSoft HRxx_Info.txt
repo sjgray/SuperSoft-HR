@@ -95,10 +95,10 @@ Address: $EFFF (61439)
 
 Mode used with SYS HR,N...... 0    1    2    3    4    5    6    7
 Binary value of MODE......... 0000 0001 0010 0011 0100 0101 0110 0111
-Option ROMS $9000 and $A000.. YES  NO   NO   ?    ?    NO   ?    NO
-Bitmapped RAM $900-$AFFF..... NO   YES  YES  ?    ?    YES  ?    YES
-Normal Text Screen........... YES  YES  NO   ?    ?    YES  ?    NO
-Bitmapped Graphics........... NO   NO   NO   ?    ?    YES  ?    YES
+Option ROMS $9000 and $A000.. YES  NO   NO   ?    YES  NO   ?    NO
+Bitmapped RAM $900-$AFFF..... NO   YES  YES  ?    NO   YES  ?    YES
+Normal Text Screen........... YES  YES  NO   ?    YES  YES  ?    NO
+Bitmapped Graphics........... NO   NO   NO   ?    NO   YES  ?    YES
 
 
 BITMAP MEMORY
