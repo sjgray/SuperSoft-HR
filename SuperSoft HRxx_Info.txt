@@ -87,26 +87,28 @@ DIL........: UB13-Pin 4 to 13 (CRTC TA0-TA9 Video memory address)
 - HR40B: Br,Red,Or,Yel,Grn,Blu,Pur,Gray,Wh,Blk
 - HR80 :
 
- 
-MEMORY MAP
-----------
 
-RAM: 8K total, at $9000-AFFF (36864-45055)
-- $9000-9FFF - Can select RAM or ROM
-- $A000-AFFF - Can select RAM or ROM
-- Clearing screen sets RAM to $FF
+CONTROL REGISTER
+----------------
 
-Control Register: $EFFF (61439)
-- Bit 0:
-- Bit 1:
-- Bit 2:
-- Bit 3:
+Address: $EFFF (61439)
+
+Mode used with SYS HR,N...... 0    1    2    3    4    5    6    7
+Binary value of MODE......... 0000 0001 0010 0011 0100 0101 0110 0111
+Option ROMS $9000 and $A000.. YES  NO   NO   ?    ?    NO   ?    NO
+Bitmapped RAM $900-$AFFF..... NO   YES  YES  ?    ?    YES  ?    YES
+Normal Text Screen........... YES  YES  NO   ?    ?    YES  ?    NO
+Bitmapped Graphics........... NO   NO   NO   ?    ?    YES  ?    YES
 
 
-BITMAP MEMORY LAYOUT
---------------------
+BITMAP MEMORY
+-------------
 
-Of the 8K (8192 bytes) on board RAM, 8000 bytes are used for the display.
+There is 8K of bitmapped RAM located at $9000 to $AFFF. Setting a bit
+to ZERO makes it VISIBLE. All 8 bits in each byte are used. Setting a byte
+to 255 turns OFF all the pixels, setting to 0 turns ON all the pixels.
+
+Of the 8192 bytes of graphics RAM, 8000 bytes are used for the display.
 40 characters x 25 lines x 8 bytes per character = 8000.
 Think of the bitmap memory as 1024 bytes wide by 8 pixels tall.
 Now imagine chopping it into 40 bytes wide chunks and stacking them one
