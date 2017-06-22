@@ -1,7 +1,18 @@
 SuperSoft High Resolution Graphics Boards (C)1982 HR40B, HR80, HR82
 ===================================================================
+!!!!!!!!!!!!!!! THIS DOCUMENT IS A WORK IN PROGRESS !!!!!!!!!!!!!!!
+!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 
 Compiled by Steve Gray, Feb 13/2014  Updated: Jun 21/2017
+
+To Do:
+  1) Document Firmware commands
+  2) Document all Control Register Modes
+  3) Complete HR40B Netlist
+  4) Document HR80 trace differences
+  5) Figure out HR80 missing connection info
+  6) Compare HR40B and HR80 firmware
+
 
 BOARD DIFFERENCES
 -----------------
