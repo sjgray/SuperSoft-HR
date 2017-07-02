@@ -10,7 +10,7 @@
 ;---- Storage
 
 SRC    = $B1					; Source Pointer
-DEST   = $E1					; Destination Pointer
+DEST   = $B5					; Destination Pointer
 CCOUNT = $DA					; Character Counter (0-999)
 RASTER = $FF					; Raster Counter    (0-7)
 
@@ -73,11 +73,11 @@ skip2
 		BNE TEST_COUNT
 		INC CCOUNT+1			; Increment Character Count HI
 TEST_COUNT
-		LDA CCOUNT+1			; Get the Character Count HI
-		CMP #3                          ; Is Count on Page 3?
+		LDA CCOUNT			; Get the Character Count LO
+		CMP #$E8                        ; Is Count LO of 1000?
 		BNE COPY_LOOP                   ; No, jump back up for more		
-		LDA CCOUNT                      ; Get the Character Count LO
-		CMP #$E8			; Is Count at $E8? ($03E8=1000 characters)
+		LDA CCOUNT+1                    ; Get the Character Count HI
+		CMP #$03			; Is Count HI of 1000? ($03E8=1000 characters)
 		BNE COPY_LOOP                   ; No, jump back up for more                     
 RAST_DONE
 		INC DEST+1			; Jump ahead to next HI byte!!! (SKIP last 24 bytes!)
