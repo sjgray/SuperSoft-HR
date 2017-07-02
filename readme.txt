@@ -8,9 +8,10 @@ HR80
 
 We have:
 
-\Firmware     - Original Firmware
+\Demos        - Demo software, converted from Dubbel-W Graphics board
 \Disassembly  - Contains a disassembly of the firmware
 \Docs         - Excerpt from a SuperSoft catalog showing command
+\Firmware     - Original Firmware
 \Pictures     - Pictures of HR40 and HR80 boards
 
 Steve
