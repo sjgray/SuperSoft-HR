@@ -3,7 +3,7 @@ SuperSoft High Resolution Graphics Boards (C)1982 HR40B, HR80, HR82
 !!!!!!!!!!!!!!! THIS DOCUMENT IS A WORK IN PROGRESS !!!!!!!!!!!!!!!
 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 
-Compiled by Steve Gray, Feb 13/2014  Updated: Jun 21/2017
+Compiled by Steve Gray, Feb 13/2014  Updated: Nov 1/2017
 
 To Do:
   1) Document Firmware commands
@@ -104,12 +104,15 @@ CONTROL REGISTER
 
 Address: $EFFF (61439)
 
-Mode used with SYS HR,N...... 0    1    2    3    4    5    6    7
-Binary value of MODE......... 0000 0001 0010 0011 0100 0101 0110 0111
-Option ROMS $9000 and $A000.. YES  NO   NO   ?    YES  NO   ?    NO
-Bitmapped RAM $900-$AFFF..... NO   YES  YES  ?    NO   YES  ?    YES
-Normal Text Screen........... YES  YES  NO   ?    YES  YES  ?    NO
-Bitmapped Graphics........... NO   NO   NO   ?    NO   YES  ?    YES
+      ROM      HI-RES  HI-RES  PET
+MODE  SOCKETS  RAM     SCREEN  SCREEN  MODE
+----  -------  ------  ------  ------  ----
+0     ON       OFF     OFF     ON      0000
+1     OFF      ON      OFF     ON      0001
+2     ON       OFF     OFF     OFF     0010
+3     OFF      ON      OFF     OFF     0011
+5     OFF      ON      ON      ON      0101
+6     OFF      ON      ON      OFF     0110
 
 
 BITMAP MEMORY
@@ -166,12 +169,17 @@ SuperSoft HR Commands
 All commands start with SYS HR, where HR is $E902 hex, or 59650 decimal.
 Brackets {} indicate optional parameters.
 
-Set Mode.......: n			Where 'n' is 0 to 15
-						0 = disabled
-						1 = RAM only
-						2 = Blank both screens
-						5 = Graphics + native screen
-						7 = Graphics only
+Set Mode.......: n			Where 'n' is 0 to 6
+
+      ROM      HI-RES  HI-RES  PET
+MODE  SOCKETS  RAM     SCREEN  SCREEN  MODE
+----  -------  ------  ------  ------  ----
+0     ON       OFF     OFF     ON      0000
+1     OFF      ON      OFF     ON      0001
+2     ON       OFF     OFF     OFF     0010
+3     OFF      ON      OFF     OFF     0011
+5     OFF      ON      ON      ON      0101
+6     OFF      ON      ON      OFF     0110
 
 Set Point......: SP,X,Y  		(White)
 Reset Point....: RP,X,Y  		(Black)
