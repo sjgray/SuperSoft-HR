@@ -1,0 +1,7 @@
+3dcubehidden :- draws two rotating cubes with hidden lines
+
+3dcubehidimage :- saved images from rotation. To load use the add-on Mon programm run by SYS 30775 to load and save the images.
+
+3dcubetabcode :- animation code and image table. Use add-on Mon to load and save the image table and animation code
+
+Needs 64K addon board

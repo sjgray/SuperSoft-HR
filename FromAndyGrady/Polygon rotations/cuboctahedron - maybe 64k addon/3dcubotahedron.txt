@@ -1,0 +1,6 @@
+Load anima.prg and protect from basic
+
+Be careful with overwriting the anima with compressed images. reduce the size or number of rotations to limit the no images saved.
+OR save to the 64K memory board.
+
+Plots a rotating cuboctahedron with hidden lines.

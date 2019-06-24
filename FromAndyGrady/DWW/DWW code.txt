@@ -1,0 +1,8 @@
+This directory contains example animations and images cr4ated for the DWW board and ported across to the HR40
+
+Ensure SS is enabled with sys59650,5: sys 59650,c
+
+Load the .prg files and run.
+
+
+The .asm files contain the assembly code for the animations.

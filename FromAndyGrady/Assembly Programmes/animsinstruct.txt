@@ -1,0 +1,33 @@
+Programme to compress an image displayed using the supersoft board and store in PET RAM. It uses an image counter and table for the low and high
+address where the image should be stored. Any programme should start by setting these to the starting location as shown below.
+
+Use this for displaying single compressed images.
+
+Use TIM to load anaims.prg
+
+Protect from basic programmes
+
+Poke 52,25: Poke 53,126:CLR
+
+Load basic programme. before cfreatign an animation, set image number and starting low and high image address pointer for the code to store the first image.
+The code will tehn increment the no images by 1 and when called again store the next image after the previous one etc.
+
+Image Number : $1f00 (poke 7936,0)
+
+Image pointer table
+
+Image Low Ad : $1f01 (poke 7937,0) suggest starting address : $00
+Image High Ad: $1f31 (poke 7985,32)suggest starting address : $20
+
+To compress an image and save to PET memory : SYS 32288
+There is no checking if the imaged when stored in RAM will overwrite this programme.
+
+When finished constructing image stack, ensure total number of images is decreased by 1
+
+To display a compressed image set the image number and then call SYS 32539
+
+This will pull the image number, and use it to get the image low and high address in memory from the pointer table and display on the SS board.
+Enable the board before running. After displaying hte image it will return to basic
+
+
+To save your work just use TIM to save the pointer table and your compressed images to disk

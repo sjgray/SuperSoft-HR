@@ -1,0 +1,5 @@
+Load anima.prg and protect its space from basic.
+
+Load and run the various cube rotations programs.
+
+They will automatically save the SS screen to PET memory in compressed form

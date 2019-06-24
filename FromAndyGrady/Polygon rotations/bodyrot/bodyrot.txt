@@ -1,0 +1,3 @@
+Load anima.prg and protect from basic.
+
+bodyrot is the general basic program that shows a rotating sphere. bodyrotimage is the compressed image library

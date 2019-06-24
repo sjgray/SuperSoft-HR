@@ -1,0 +1,3 @@
+this transforms a icosahedron and rotates it on the screen.
+
+MUST use 64K addon memory and load the animah.prg to save the images to memory

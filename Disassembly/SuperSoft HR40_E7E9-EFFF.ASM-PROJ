@@ -354,7 +354,7 @@ E918,-,If the command was not found use the value for the Control Register
 E921,-,Push the target address on the stack and jump to it using RTS
 E92A,-,Command Table
 E938,-,Command Vectors
-E954,=,"O" and "K" COMMANDS. Unknown. O=Off or K=KILL?? Appears to restore CHRGET routine
+E954,=,"O" and "K" COMMANDS. OFF/KILL. Restore CHRGET routine.
 E966,i,$E455 is default IRQ Vector
 E972,=,"P" COMMAND. Set Pointer to Character Set
 E985,=,"S" COMMANDS. +"P"=Set Point. +"L"=Set Line
@@ -364,9 +364,9 @@ E98E,=,"D" COMMAND. Dot Line.
 E99A,i,Check second character. Is it "L"? L=Line.
 EB44,i,$E798 is the TEXT SCREEN Line Address Table LO
 EBA7,=,"E" COMMAND. Examine.
-EBC5,=,$8B COMMAND (RVS K). Unknown.
+EBC5,=,$8B COMMAND (RVS K). FLIP Text
 EBC8,=,"T" COMMAND. Text. +"NH"=Normal Horizontal
-EBCB,=,$A4 COMMAND (RVS $). Unknown.
+EBCB,=,$A4 COMMAND (RVS $). TEXT Routine
 EBDB,i,Is it "R"?
 EBDF,i,Is it "N"?
 EBE8,i,Is it "H"?

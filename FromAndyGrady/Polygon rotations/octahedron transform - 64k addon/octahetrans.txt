@@ -1,0 +1,6 @@
+this transforms an octahedron and rotates it on the screen.
+
+MUST use 64K addon memory and load the animah.prg to save the images to memory
+
+use the built in add-on mon to load the image table and date into banks 0/2 (3docttransfm02m) and 1/3 (3doctransfmb13m) and then run the animation
+with SYS 30496

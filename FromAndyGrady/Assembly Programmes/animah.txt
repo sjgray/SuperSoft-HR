@@ -1,0 +1,45 @@
+For 64k addon board ONLY
+
+Programme to compress an image displayed using the supersoft board and store in PET RAM. It uses an image counter and table for the low and high
+address where the image should be stored. Any programme should start by setting these to set the first image.
+
+The playback animation code will cycle through the image stack and display each image on after the other to simulate animation.
+
+Use TIM to load anaimahmod.prg
+
+Protect from basic programmes
+
+Poke 52,0: Poke 53,18:CLR
+
+Load basic programme. before cfreatign an animation, set image number and starting low and high image address pointer for the code to store the first image.
+The code will tehn increment the no images by 1 and when called again store the next image after the previous one etc.
+
+Image Number : $7f00 (poke 32512,0)
+
+Image pointer table
+
+Image Low Ad : $7f01 (poke 32513,0) suggest starting address : $00
+Image High Ad: $7f31 (poke 32576,32)suggest starting address : $80
+
+To compress an image and save to PET 64k addon memory : SYS 30208
+
+It starts with banks 02 and whe filed switches to banks 13
+
+When finished constructing image stack, ensure total number of images is decreased by 1
+
+To run the animation SYS 30490
+This will pull the image number, and use it to get the image low and high address in memory from the pointer table and display on the SS board.
+Enable the board before running.
+
+Pressing the STOP key will break out of the animation and it has performed a complete cycle.
+
+SYS 30775 runs the 64l addon Add-Mon board so you can save images and load then into the memory bank.
+
+*80 sets banks 02 
+
+Syntax identical to TIM for loading and saving
+
+*8C sets banks 13
+
+
+To save your work just use the Add-Mon programme, SYS 30775, to save the pointer table and your compressed images to disk

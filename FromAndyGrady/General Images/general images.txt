@@ -1,0 +1,7 @@
+The files in this directory are images saved directly from the H40 memory bank $9000-$Afff
+
+To load, first enable the SS board with 
+
+SYS 59650,5: sys 59650,C
+
+The run TIM and load the images directly to the SS board. IF you do not use TIM then you will get an out of memory error.

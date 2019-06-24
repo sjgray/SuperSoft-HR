@@ -1,0 +1,5 @@
+These are the HAL games ported to run on BASIC 04. 
+
+Build and Burn a charatcer rom for all fo the games
+
+Using the MUltiROM board from S Gray you can switch character roms to play each game

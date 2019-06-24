@@ -1,0 +1,22 @@
+These programmes assumes the person knows how to write basic programme and has familiarity with machine code and using the TIM.
+
+The User manual for the SuperSoft HR-40 graphics card is on Mike's website.
+
+The PolyGon programs were created by adapting the code in the book "ADVANCED GRAPHICS WITH THE BBC MICRO" and also "Advanced Graphics with the Sinclair ZX Spectrum"
+written by Ian O. Angell and Brian J. Jones. These are great texts for learning anbout matrix calcualtions, rotations and plotting the results.
+I have had to adapt the code to run on the PET with the SS board.
+
+The subroutines in the basic PET polygon drawing programmes are as follows (use the above book for how these are used)
+
+fnangle : 8800
+rot3	: 8600
+scale3	: 8900
+mult3	: 9000
+idr3	: 9200
+trans3	: 9300
+set orig : 9600
+scale	: 9700
+moveto	: 9760
+lineto	: 9770
+triangle :10000
+

@@ -1,0 +1,24 @@
+The SCN programmes are bsaic/assembly programmes that cycle through a number of saved compressed images to simulate a screen saver.
+
+First initialise the SS board and clear the memory.
+
+Run TIM and load "anims.prg" into memory.
+
+Then from the basic prompt, 
+
+poke 52,16:poke 53,126:clr
+
+This protects the animation/compression program form basic programmes.
+
+load the SCN... basic programes and run.
+
+For reference, the image number is found in 7936 ($1f00). The low byte for the compressed image is 7937 ($1f01) and the high byte 7985 ($1f31)
+ in the image table.
+
+To compress an image you much first setup the starting pointers by zeroing the image number and defineing the low high bytes for where the compressed 
+imaged will be stored in PET memory.
+
+SYS 32272 compresses the image and increases the image count by 1. The next time this is called the compression code picks this numebr and tags the next
+compressed image to the end of the last one
+
+SYS 32523 displayes the compressed image defined by the image number in the SS memory.

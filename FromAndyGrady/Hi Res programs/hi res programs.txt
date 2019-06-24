@@ -1,0 +1,3 @@
+Some general programs that generate hi res plots for the SS board.
+
+Enable the board, clear the screen then load these basic programs.

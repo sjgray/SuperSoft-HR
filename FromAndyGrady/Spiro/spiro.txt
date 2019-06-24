@@ -1,0 +1,7 @@
+Enable the SS board as usual
+
+SYS 59650,5:sys 59650,c
+
+
+Then load the various spirograph programs and see the high res plots beign created. To save them use anima.prg for compressed images
+or save the whole of the SS memory directly to disk (8k file).
